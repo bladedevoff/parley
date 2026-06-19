@@ -209,6 +209,22 @@ export default function App() {
         <Console />
       </div></section>
 
+      <section className="block"><div className="wrap">
+        <span className="eyebrow"><I n="check" /> Proof · a real run on Band</span>
+        <h2>Not a mock — captured live in the Band workspace</h2>
+        <p className="lead">The same negotiation, running for real on app.band.ai across four agents and a first-party human. An agent’s APPROVE is refused; only the data owner’s human can release; the capability runs in place and exports zero rows.</p>
+        <div className="bandshots">
+          <figure>
+            <img src="band/band-run-deal1.png" alt="Parley full run on Band — human gate and cohort_aggregate" loading="lazy" />
+            <figcaption>Customer-data deal (deal-1): the Vault refuses an agent’s <code>APPROVE</code>; the Lumen Retail human <b>Denis Belianin</b> (@lumen-retail) approves; <code>cohort_aggregate</code> runs in place → checker <b>PASS</b>, 6 cohorts ≥ 25, <code>rows_exported=0</code>.</figcaption>
+          </figure>
+          <figure>
+            <img src="band/band-run-coach3.png" alt="Parley HR run on Band — team-level productivity metrics" loading="lazy" />
+            <figcaption>HR domain (coach-3): only team-level <code>productivity_metrics</code> leave — every team ≥ k=5, teams under 5 suppressed in place, no per-employee rows, <code>rows_exported=0</code>.</figcaption>
+          </figure>
+        </div>
+      </div></section>
+
       <section className="block" id="why"><div className="wrap">
         <span className="eyebrow"><I n="scale" /> vs. the field</span>
         <h2>Most entries add agents. Parley recruits one that can refuse.</h2>

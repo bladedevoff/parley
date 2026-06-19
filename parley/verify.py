@@ -57,7 +57,7 @@ def attest(bundle: dict, *, owner_pubkey: str | None = None) -> dict:
     add("provenance_chain_intact", chain["ok"], chain["reason"])
     trusted = bool(pinned) and bundle_pub == pinned and chain["ok"]
     if trusted:
-        detail = f"signatures validate against PINNED owner key {pinned[:16]}…"
+        detail = f"signatures validate against PINNED owner key {pinned[:16]}..."
     elif not pinned:
         detail = "self-published key only -- pin the owner key out-of-band to trust it"
     else:
