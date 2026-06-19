@@ -192,12 +192,16 @@ export VAULT_LLM_VENDOR=groq GROQ_API_KEY=...   # free key: https://console.groq
 uv run python scripts/run_cross_vendor_demo.py  # → proof/cross-vendor-decision.json
 ```
 
-**What's real vs. demo.** Real: live Band traffic; the consent, counter-offer, refusal
-and human gate are genuine LLM/Band events; the export gate, k-anonymity, DP/RDP
+**What's real vs. demo.** Real: two **separate Band organizations**
+(@northwind-analytics ↔ @lumen-retail) with a genuine cross-org boundary — the owner
+must accept the contact — and two independent operators run it out of the box
+(`run_org.py buyer|owner` + `JOIN.md`); live Band traffic; the consent, counter-offer,
+refusal and human gate are genuine LLM/Band events; the export gate, k-anonymity, DP/RDP
 accountant and all signing/verify invariants are deterministic code under **124 tests**
 (6 gated behind the `cross-vendor` extra). Demo-scoped: the owner's dataset is a seeded
-cohort table in `scenario.yaml` aggregated by an in-process clean room (a pluggable
-real-clean-room backend is on the roadmap).
+cohort table in `scenario.yaml` aggregated by an in-process clean room (pluggable
+real-clean-room backend on the roadmap); the *recorded* walkthrough was driven by one
+operator holding both org accounts — the code runs two real operators unchanged.
 
 ## Safety — cross-org means untrusted input
 
