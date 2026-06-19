@@ -1,0 +1,33 @@
+# Example 1 — Cross-org customer-data collaboration (the original, live-ready).
+# A marketing analytics firm recruits a retailer's data-custodian agent. The
+# custodian refuses raw customer rows and counter-offers in-place k-anonymous
+# cohort analytics (or in-place model training). Run live with:
+#   PARLEY_SCENARIO=examples/01_data_collaboration.yaml uv run python -m parley.agents.vault
+deal_id: deal-1
+buyer:  { name: Northwind Analytics, org: northwind, goal: build a lookalike audience model }
+owner:  { name: Lumen Retail, org: lumen, custodian_role: customer-data custodian }
+agents:
+  coordinator: "@northwind-analytics/coordinator"
+  modeler: "@northwind-analytics/modeler"
+  checker: "@northwind-analytics/checker"
+  vault: "@lumen-retail/vault"
+policy:
+  k_floor: 25
+  owner_org: lumen
+  forbidden_columns: [name, full_name, email, phone, ssn, customer_id]
+  capabilities: [cohort_aggregate, train_in_place, audience_estimate]
+  allowed_purposes: [audience_modeling]   # purpose limitation (GDPR 5(1)(b)): consent is bound to this; other uses are refused
+  deliverable_title: "Lookalike segments (ready to target — no raw data left)"
+  dp_epsilon: 1.0            # differential privacy: Laplace noise per released query
+  dp_total_budget: 2.5       # composing per-counterparty budget (exhaustion forces decline)
+request:
+  raw_ask: "customer-level rows: age, income, purchase frequency, category, geo, browsing behavior"
+  aggregate_spec: "cohort counts by age band, income, region; every cohort >= k_floor; no identifiers; no raw rows"
+cohorts:
+  "age:18-24|region:west": 142
+  "age:25-34|region:west": 388
+  "age:25-34|region:east": 271
+  "age:35-44|region:central": 205
+  "age:45-54|region:east": 96
+  "age:55-64|region:west": 54
+  "age:65+|region:rural": 12        # < k_floor -> suppressed

@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Parley Console — the agent that can say no</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --line:#21262d; --ink:#e6edf3; --dim:#8b949e;
+    --buy:#f0883e; --own:#58a6ff; --ok:#3fb950; --bad:#f85149; --warn:#d29922;
+    --chip:#1f2630;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 ui-sans-serif,system-ui,Segoe UI,Roboto,Arial}
+  header{padding:18px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  h1{font-size:18px;margin:0;font-weight:700}
+  h1 .dim{color:var(--dim);font-weight:400}
+  .scenarios{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+  button{cursor:pointer;border:1px solid var(--line);background:var(--chip);color:var(--ink);
+    padding:8px 12px;border-radius:8px;font-size:13px;transition:.15s}
+  button:hover{border-color:#3d444d;background:#222a35}
+  button.active{border-color:var(--own);background:#10243b}
+  button.primary{background:var(--ok);border-color:var(--ok);color:#04130a;font-weight:700}
+  button.danger{background:#2a1416;border-color:#5c2326;color:#ffb4ae}
+  .wrap{display:grid;grid-template-columns:1.55fr .95fr;gap:0;min-height:calc(100vh - 63px)}
+  .stage{padding:18px 24px;border-right:1px solid var(--line)}
+  .orgs{display:flex;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .org{flex:1;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--panel)}
+  .org.buy{border-top:3px solid var(--buy)} .org.own{border-top:3px solid var(--own)}
+  .org h3{margin:0 0 6px;font-size:13px;letter-spacing:.3px}
+  .org .who{color:var(--dim);font-size:12px}
+  .agents{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .agent{font-size:11px;padding:3px 8px;border-radius:999px;background:var(--chip);border:1px solid var(--line);color:var(--dim)}
+  .agent.live{color:var(--ink);border-color:#3d444d}
+  .timeline{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+  .msg{max-width:78%;padding:10px 13px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+    opacity:0;transform:translateY(6px);animation:rise .35s forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .msg .from{font-size:11px;color:var(--dim);margin-bottom:3px}
+  .msg.left{align-self:flex-start;border-left:3px solid var(--buy)}
+  .msg.right{align-self:flex-end;border-right:3px solid var(--own)}
+  .msg .tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.5px;padding:2px 7px;border-radius:6px;margin-right:6px}
+  .t-counter{background:#3a2a10;color:#f0c674} .t-accept{background:#10301c;color:#7ee2a8}
+  .t-decline,.t-blocked{background:#3a1418;color:#ffb4ae} .t-raw{background:#3a1418;color:#ffb4ae}
+  .t-run{background:#10243b;color:#9cd2ff} .t-pass{background:#10301c;color:#7ee2a8}
+  .gate{margin:14px 0;padding:14px;border:1px dashed #3d444d;border-radius:12px;background:#11161d}
+  .gate h4{margin:0 0 8px;font-size:13px}
+  .gate .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .note{font-size:12px;color:var(--dim);margin-top:8px}
+  .payoff{margin-top:14px}
+  .side{padding:18px 20px;background:#0b0f14;overflow:auto}
+  .card{border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:12px 14px;margin-bottom:14px}
+  .card h3{margin:0 0 10px;font-size:13px;letter-spacing:.3px;display:flex;align-items:center;gap:8px}
+  .badge{font-size:11px;padding:3px 9px;border-radius:999px;font-weight:700}
+  .badge.ok{background:#10301c;color:#7ee2a8} .badge.bad{background:#3a1418;color:#ffb4ae}
+  .badge.zero{background:#10243b;color:#9cd2ff}
+  .inv{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-top:1px solid var(--line);font-size:13px}
+  .inv:first-of-type{border-top:none}
+  .inv .mk{width:18px;flex:0 0 18px;font-weight:700}
+  .inv .mk.ok{color:var(--ok)} .inv .mk.bad{color:var(--bad)} .inv .mk.pending{color:var(--dim)}
+  .inv .d{color:var(--dim);font-size:12px}
+  .inv .nm{font-weight:600}
+  .rows{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;color:var(--dim);max-height:160px;overflow:auto}
+  .deliv{font-size:13px} .deliv li{margin:4px 0}
+  .pii{color:#ffb4ae;text-decoration:line-through;opacity:.7}
+  .footer{padding:10px 24px;border-top:1px solid var(--line);color:var(--dim);font-size:12px}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<header>
+  <h1>Parley Console <span class="dim">— the agent that can say no</span></h1>
+  <div class="scenarios">
+    <button data-mode="normal" class="active">Normal deal</button>
+    <button data-mode="inject" class="danger">Injection attack</button>
+    <button data-mode="purpose" class="danger">Wrong purpose</button>
+    <button data-mode="budget" class="danger">Exhaust DP budget</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="stage">
+    <div class="orgs">
+      <div class="org buy">
+        <h3 style="color:var(--buy)">Northwind Analytics</h3>
+        <div class="who">requester — wants the data</div>
+        <div class="agents"><span class="agent live">@coordinator</span><span class="agent live">@modeler</span><span class="agent live">@checker</span></div>
+      </div>
+      <div class="org own">
+        <h3 style="color:var(--own)">Lumen Retail</h3>
+        <div class="who">data owner — the recruited stranger</div>
+        <div class="agents"><span class="agent live">@vault</span><span class="agent">DPO (human)</span></div>
+      </div>
+    </div>
+
+    <div id="timeline" class="timeline"></div>
+
+    <div id="gate" class="gate hidden">
+      <h4>Export gate — only a first-party Lumen human may approve</h4>
+      <div class="row">
+        <button id="agentApprove" class="danger">🤖 Agent sends “APPROVE deal-1”</button>
+        <button id="humanApprove" class="primary">🧑 Lumen DPO: APPROVE deal-1</button>
+      </div>
+      <div id="gateNote" class="note"></div>
+    </div>
+
+    <div id="payoff" class="payoff"></div>
+  </section>
+
+  <aside class="side">
+    <div class="card">
+      <h3>Outcome <span id="outcomeBadge"></span></h3>
+      <div id="outcome" class="note">Pick a scenario above.</div>
+    </div>
+    <div class="card">
+      <h3>Deliverable returned <span class="badge zero" id="rowsBadge">rows_exported: 0</span></h3>
+      <div id="deliverable" class="deliv note">—</div>
+    </div>
+    <div class="card">
+      <h3>Third-party <code>verify</code> <span id="verifyBadge"></span></h3>
+      <div id="verify"></div>
+    </div>
+  </aside>
+</div>
+<div class="footer">Offline kernel (DealSession + attest) — deterministic, no Band/VPN/keys. Same code path as the tests &amp; <code>proof/</code> bundles.</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const el = (t, c, h) => { const e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e; };
+const wait = ms => new Promise(r=>setTimeout(r,ms));
+const esc = s => String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+
+let DATA=null;
+
+function summarizeRequest(d){
+  if(d.note) return `“${esc(d.note)}”`;
+  if(d.raw) return `Send the <b>raw customer rows</b>: ${esc((d.columns||[]).join(', '))}`;
+  return `Aggregate only: columns ${esc((d.columns||['bucket','count']).join(', '))}, k≥${esc(d.k||'')}${d.purpose?`, purpose=<b>${esc(d.purpose)}</b>`:''}`;
+}
+function consentBubble(d){
+  const dec=(d.final||d.decision||'').toLowerCase();
+  const tag = dec==='counter'?'<span class="tag t-counter">COUNTER-OFFER</span>'
+            : dec==='accept'?'<span class="tag t-accept">ACCEPT</span>'
+            : '<span class="tag t-decline">DECLINE</span>';
+  const reason = (d.reasons&&d.reasons[0]) ? esc(d.reasons[0]) :
+     (dec==='counter'?'No raw rows. I’ll run it in place and return only k-anonymous aggregates.':'');
+  return tag + (reason?`<div style="margin-top:4px">${reason}</div>`:'');
+}
+
+function mkMsg(side, from, html, delay){
+  const m = el('div', `msg ${side}`, `<div class="from">${esc(from)}</div>${html}`);
+  m.style.animationDelay = (delay||0)+'ms';
+  return m;
+}
+
+function renderVerify(checks, reveal){
+  const box=$('#verify'); box.innerHTML='';
+  (checks||[]).forEach((c,i)=>{
+    const mk = !reveal ? '<span class="mk pending">•</span>'
+            : (c.ok?'<span class="mk ok">✓</span>':'<span class="mk bad">✗</span>');
+    const row = el('div','inv', `${mk}<div><div class="nm">${esc(c.invariant)}</div><div class="d">${esc(c.detail||'')}</div></div>`);
+    box.appendChild(row);
+  });
+  if(reveal){
+    const ok = (checks||[]).every(c=>c.ok);
+    $('#verifyBadge').innerHTML = `<span class="badge ${ok?'ok':'bad'}">${ok?'VERIFIED · exit 0':'FAILED · exit 1'}</span>`;
+  } else $('#verifyBadge').innerHTML='';
+}
+
+function renderDeliverable(d){
+  const box=$('#deliverable');
+  if(!d || (Array.isArray(d)&&!d.length) || (typeof d==='object'&&!Object.keys(d).length)){ box.innerHTML='—'; return; }
+  let html='';
+  if(d.title) html+=`<div style="color:var(--ink);font-weight:600;margin-bottom:6px">${esc(d.title)}</div>`;
+  const list = d.segments||d.plan||d.brief;
+  if(Array.isArray(list)){ html+='<ul style="margin:0;padding-left:18px">'+list.map(s=>`<li>${esc(s)}</li>`).join('')+'</ul>'; }
+  if(d.note) html+=`<div class="note" style="margin-top:6px">${esc(d.note)}</div>`;
+  box.innerHTML = html || '<span class="note">aggregate returned; raw rows never left Lumen.</span>';
+}
+
+function showExecution(){
+  const d=DATA; const pay=$('#payoff'); pay.innerHTML='';
+  const exec = d.receipts.filter(r=>['dp_charge','injection_block','capability_run','checker'].includes(r.kind));
+  exec.forEach((r,i)=>{
+    let html, side='right', from='@'+d.owner.org+'/vault';
+    if(r.kind==='injection_block'){ html='<span class="tag t-blocked">REFUSED · fail-closed</span> request flagged '+esc(JSON.stringify(r.data.flags)); }
+    else if(r.kind==='dp_charge'){ const a=r.data; html = a.allowed? `<span class="tag t-run">DP charge</span> ε=${esc(a.epsilon)} · remaining=${esc(a.remaining)}` : `<span class="tag t-blocked">DP BUDGET EXHAUSTED</span> ${esc(a.reason)}`; }
+    else if(r.kind==='capability_run'){ html=`<span class="tag t-run">RAN ${esc(r.data.capability)}</span> rows_exported=${esc(r.data.rows_exported)} · purpose=${esc(r.data.purpose)}`; }
+    else if(r.kind==='checker'){ from='@'+d.buyer.org+'/checker'; side='left'; const v=(r.data.verdict||'').toUpperCase(); html=`<span class="tag ${v==='PASS'?'t-pass':'t-blocked'}">${v}</span> ${esc((r.data.findings||[]).join(', ')||'aggregates valid')}`; }
+    pay.appendChild(mkMsg(side, from, html, i*250));
+  });
+  // blocked-outcome banner if the capability did not run
+  if(d.capability && d.capability.status!=='ok'){
+    pay.appendChild(mkMsg('right','@'+d.owner.org+'/vault',
+      `<span class="tag t-blocked">BLOCKED</span> ${esc(d.capability.reason||'')}`, exec.length*250));
+  }
+  renderDeliverable(d.deliverable);
+  $('#rowsBadge').textContent = 'rows_exported: '+((d.capability&&d.capability.rows_exported)??0);
+  // outcome
+  const ok=d.verify_ok && d.capability && d.capability.status==='ok';
+  $('#outcomeBadge').innerHTML = `<span class="badge ${ok?'ok':'bad'}">${ok?'DEAL COMPLETED':'REFUSED'}</span>`;
+  $('#outcome').innerHTML = ok
+    ? `Lumen’s stranger agent counter-offered, the human approved, the capability ran <b>in place</b> (rows_exported 0), and the checker passed.`
+    : `The kernel <b>refused</b> this deal: ${esc(d.capability?d.capability.reason:'')}. No data left Lumen.`;
+  setTimeout(()=>renderVerify(d.verify_checks, true), exec.length*250+200);
+}
+
+async function play(){
+  const d=DATA;
+  const tl=$('#timeline'); tl.innerHTML=''; $('#payoff').innerHTML=''; $('#gate').classList.add('hidden');
+  $('#gateNote').textContent=''; renderVerify(d.verify_checks,false);
+  $('#outcome').textContent='Negotiating…'; $('#outcomeBadge').innerHTML=''; renderDeliverable(null);
+
+  const nego = d.receipts.filter(r=>['request','consent'].includes(r.kind));
+  for(const r of nego){
+    if(r.kind==='request'){ tl.appendChild(mkMsg('left', '@'+d.buyer.org+'/modeler', summarizeRequest(r.data))); }
+    else { tl.appendChild(mkMsg('right', '@'+d.owner.org+'/vault', consentBubble(r.data))); }
+    await wait(700);
+  }
+  // gate
+  $('#gate').classList.remove('hidden');
+}
+
+function setupGate(){
+  $('#agentApprove').onclick = ()=>{
+    $('#gateNote').innerHTML = '❌ <b>Rejected.</b> An agent (or a human from the requesting org) cannot authorize an export — first-party Lumen human only.';
+  };
+  $('#humanApprove').onclick = ()=>{
+    $('#gateNote').innerHTML = '✅ <b>Approved by the Lumen DPO (human).</b> Releasing to the in-place capability…';
+    $('#humanApprove').disabled=true; $('#agentApprove').disabled=true;
+    showExecution();
+  };
+}
+
+async function loadMode(mode){
+  document.querySelectorAll('.scenarios button').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
+  const res = await fetch('/api/run?mode='+encodeURIComponent(mode));
+  DATA = await res.json();
+  if(DATA.error){ $('#timeline').innerHTML='<div class="msg left">error: '+esc(DATA.error)+'</div>'; return; }
+  await play();
+}
+
+document.querySelectorAll('.scenarios button').forEach(b=> b.onclick=()=>loadMode(b.dataset.mode));
+setupGate();
+loadMode('normal');
+</script>
+</body>
+</html>

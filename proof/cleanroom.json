@@ -1,0 +1,105 @@
+{
+  "rows_scanned": 1000,
+  "rows_exported": 0,
+  "cohorts_released": 24,
+  "k_floor": 25,
+  "dp_applied": true,
+  "released": [
+    {
+      "bucket": "age_band:65+|region:west",
+      "count": 58
+    },
+    {
+      "bucket": "age_band:25-34|region:central",
+      "count": 51
+    },
+    {
+      "bucket": "age_band:35-44|region:west",
+      "count": 51
+    },
+    {
+      "bucket": "age_band:45-54|region:central",
+      "count": 50
+    },
+    {
+      "bucket": "age_band:45-54|region:rural",
+      "count": 50
+    },
+    {
+      "bucket": "age_band:55-64|region:central",
+      "count": 50
+    },
+    {
+      "bucket": "age_band:18-24|region:central",
+      "count": 49
+    },
+    {
+      "bucket": "age_band:25-34|region:west",
+      "count": 48
+    },
+    {
+      "bucket": "age_band:18-24|region:rural",
+      "count": 47
+    },
+    {
+      "bucket": "age_band:65+|region:east",
+      "count": 43
+    },
+    {
+      "bucket": "age_band:35-44|region:central",
+      "count": 42
+    },
+    {
+      "bucket": "age_band:25-34|region:east",
+      "count": 41
+    },
+    {
+      "bucket": "age_band:18-24|region:east",
+      "count": 40
+    },
+    {
+      "bucket": "age_band:18-24|region:west",
+      "count": 39
+    },
+    {
+      "bucket": "age_band:65+|region:rural",
+      "count": 38
+    },
+    {
+      "bucket": "age_band:35-44|region:rural",
+      "count": 37
+    },
+    {
+      "bucket": "age_band:45-54|region:west",
+      "count": 36
+    },
+    {
+      "bucket": "age_band:65+|region:central",
+      "count": 36
+    },
+    {
+      "bucket": "age_band:55-64|region:rural",
+      "count": 35
+    },
+    {
+      "bucket": "age_band:55-64|region:west",
+      "count": 34
+    },
+    {
+      "bucket": "age_band:55-64|region:east",
+      "count": 31
+    },
+    {
+      "bucket": "age_band:45-54|region:east",
+      "count": 31
+    },
+    {
+      "bucket": "age_band:35-44|region:east",
+      "count": 29
+    },
+    {
+      "bucket": "age_band:25-34|region:rural",
+      "count": 28
+    }
+  ]
+}

@@ -1,0 +1,210 @@
+{
+  "deal_id": "coach-3",
+  "counterparty": "northwind",
+  "owner_org": "lumen",
+  "consent": {
+    "final": "accept",
+    "llm_decision": "accept",
+    "policy_decision": "accept",
+    "policy_overruled_llm": false,
+    "reasons": [
+      "request satisfies all policy rules"
+    ],
+    "required_k": 5
+  },
+  "human_gate": {
+    "accepted": true
+  },
+  "purpose": null,
+  "allowed_purposes": [],
+  "injection_flags": [],
+  "dp": {},
+  "capability_result": {
+    "capability": "productivity_metrics",
+    "rows_exported": 0,
+    "per_employee_exported": false,
+    "result": {
+      "teams": {
+        "Engineering": {
+          "headcount": 42,
+          "throughput": 3.761,
+          "productivity_index": 0.799
+        },
+        "Sales": {
+          "headcount": 31,
+          "throughput": 3.466,
+          "productivity_index": 0.746
+        },
+        "Support": {
+          "headcount": 27,
+          "throughput": 3.332,
+          "productivity_index": 0.721
+        },
+        "Design": {
+          "headcount": 9,
+          "throughput": 2.303,
+          "productivity_index": 0.534
+        }
+      },
+      "k_floor": 5
+    },
+    "deliverable": {
+      "title": "Prioritized Coaching Brief (team-level, z-scored — no per-employee data)",
+      "brief": [
+        "Team Design (hc=9, index=0.534): lagging — recommend async-standup + WIP cap, est lift ~10%.",
+        "Team Support (hc=27, index=0.721): mid-pack — protect focus time.",
+        "Team Sales (hc=31, index=0.746): mid-pack — protect focus time.",
+        "Team Engineering (hc=42, index=0.799): leading — capture & share its practices."
+      ],
+      "note": "4 teams (each >= k_floor 5); indices are z-scored from a per-team throughput signal; no names, salaries, or per-employee rows exported."
+    }
+  },
+  "checker": {
+    "verdict": "PASS",
+    "findings": []
+  },
+  "required_k": 5,
+  "released_rows": [],
+  "provenance": {
+    "deal_id": "coach-3",
+    "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+    "receipts": [
+      {
+        "seq": 0,
+        "kind": "request",
+        "actor": "@northwind requester",
+        "data": {
+          "capability": "productivity_metrics",
+          "raw": true,
+          "columns": [
+            "name",
+            "employee_id",
+            "email",
+            "salary",
+            "review_text",
+            "manager_notes"
+          ],
+          "purpose": "analysis",
+          "injection_flags": [
+            "identifier_exfil"
+          ]
+        },
+        "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "hash": "bba3ad80da34cfe9a0ecbae6b6ffe29a9f98d9d770cb72e66c01b08265770163",
+        "sig": "25f7dbd1bb3d41c6a4511c9c2104ea4d0235e4cf72e12e666caf861880dd4aa73b2df87756dc3bc98d13d8595cabf4a8805285db7ecf8777d023871340c0e707"
+      },
+      {
+        "seq": 1,
+        "kind": "consent",
+        "actor": "@lumen/vault",
+        "data": {
+          "final": "decline",
+          "llm_decision": "counter",
+          "policy_decision": "decline",
+          "policy_overruled_llm": true,
+          "reasons": [
+            "raw/row-level export is forbidden by policy",
+            "request names forbidden identifier columns: ['name', 'employee_id', 'email', 'salary', 'review_text', 'manager_notes']"
+          ],
+          "required_k": 5,
+          "purpose": null
+        },
+        "prev_hash": "bba3ad80da34cfe9a0ecbae6b6ffe29a9f98d9d770cb72e66c01b08265770163",
+        "hash": "79a338ef53a15f2c9819af1b95fb5a3643503a357dc06f47056336957c707825",
+        "sig": "1f7de8d4532e26c11cb5565e33a522d0d2f0c6ba61075de8a028865605c866de7b1663a433b9b0f08212c3bd8b6a062bfb6ce2d39aafaba65bb33ed48693c50d"
+      },
+      {
+        "seq": 2,
+        "kind": "request",
+        "actor": "@northwind requester",
+        "data": {
+          "capability": "productivity_metrics",
+          "raw": false,
+          "columns": [
+            "bucket",
+            "count"
+          ],
+          "k": 5,
+          "purpose": null,
+          "injection_flags": []
+        },
+        "prev_hash": "79a338ef53a15f2c9819af1b95fb5a3643503a357dc06f47056336957c707825",
+        "hash": "b053b72ebfe14c85328f1a97a6d418f18132ee46b8133631fc4d5f3742ed398b",
+        "sig": "e39fe4c1f68d5b975c3f5af0f8c228ba8d9e1df90786b0769cd02c0c078793b1c4b7504707a3a4898fcf1f4f8ba88fd86332b83c0a3f8f7f8fee1cc8cfa0a705"
+      },
+      {
+        "seq": 3,
+        "kind": "consent",
+        "actor": "@lumen/vault",
+        "data": {
+          "final": "accept",
+          "llm_decision": "accept",
+          "policy_decision": "accept",
+          "policy_overruled_llm": false,
+          "reasons": [
+            "request satisfies all policy rules"
+          ],
+          "required_k": 5,
+          "purpose": null
+        },
+        "prev_hash": "b053b72ebfe14c85328f1a97a6d418f18132ee46b8133631fc4d5f3742ed398b",
+        "hash": "ce4c819016c3656315cc93247e79f3f71162f2b34cc3458122dd164bdcbdb728",
+        "sig": "0d1c7474aba29445e1e202462833796b6979c9ee7be631de4181ae078742d0c825a06d37080485ffadbe7d0ec6ab90b2b3aed89fd272e1abcfac9eaed9c08b02"
+      },
+      {
+        "seq": 4,
+        "kind": "human_approve",
+        "actor": "@northwind/coordinator",
+        "data": {
+          "by": "@northwind/coordinator",
+          "is_human": false,
+          "org": "northwind",
+          "accepted": false
+        },
+        "prev_hash": "ce4c819016c3656315cc93247e79f3f71162f2b34cc3458122dd164bdcbdb728",
+        "hash": "fdd9f06051c69a8cd6a6d29ce6152de1c1d42b98246113531c0806ef6750bad0",
+        "sig": "a340145f106941853eda83790b6bb742a592d2de6c3bfd7b463db12d338ab33278a9d0bb5ca2f37604c2bc54b8bf9456d555df4e40b6c983f7d3faf193943f0d"
+      },
+      {
+        "seq": 5,
+        "kind": "human_approve",
+        "actor": "@lumen DPO (human)",
+        "data": {
+          "by": "@lumen DPO (human)",
+          "is_human": true,
+          "org": "lumen",
+          "accepted": true
+        },
+        "prev_hash": "fdd9f06051c69a8cd6a6d29ce6152de1c1d42b98246113531c0806ef6750bad0",
+        "hash": "904a237f8d3f98ad025b898cdc01e583511915a08b8861b3ae797fca660d0d9f",
+        "sig": "02568006b6839f5c7903e2a544d95dc9bfa1fa3f34b60f9ba6ce2114f902c02eaecc220bfc0e87605dcf777ccc6cf7392a9e61fb2b626c8b20284f7a8facd40c"
+      },
+      {
+        "seq": 6,
+        "kind": "capability_run",
+        "actor": "@lumen/vault",
+        "data": {
+          "capability": "productivity_metrics",
+          "rows_exported": 0,
+          "purpose": null
+        },
+        "prev_hash": "904a237f8d3f98ad025b898cdc01e583511915a08b8861b3ae797fca660d0d9f",
+        "hash": "4ab0b8d71ecac7d43b726e68310558e8987b7cd79fb4b83a9475c154cb500543",
+        "sig": "4c10d6ad8fd64a0524f27ba206fc0bc9b51abbd19e8fddf04e41d60a7edf8fb972e60d2ad99ff999c766edecd36fb175b78a5019508ee9a727b5fd4247710e0c"
+      },
+      {
+        "seq": 7,
+        "kind": "checker",
+        "actor": "@northwind/checker",
+        "data": {
+          "verdict": "PASS",
+          "findings": []
+        },
+        "prev_hash": "4ab0b8d71ecac7d43b726e68310558e8987b7cd79fb4b83a9475c154cb500543",
+        "hash": "1d4507d560f5fc939b24ae581a15aed485ba67ec8b97fb25ea1cd556a42654e7",
+        "sig": "130eb3ca622160a7f24c2ba775825850472926942b416a190606ce26eb0f2e0b98cc5aeee23cf605a2a5e4367f1fb76a23d97f42a19f391f327222dad36e5202"
+      }
+    ],
+    "public_key": "1f67436bd00a36c2d885fc4a644951dd947ca9200752a406d7e2879f953cefb8"
+  }
+}

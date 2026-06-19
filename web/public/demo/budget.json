@@ -1,0 +1,229 @@
+{
+  "mode": "budget",
+  "deal_id": "deal-1",
+  "buyer": {
+    "name": "Northwind Analytics",
+    "org": "northwind",
+    "goal": "build a lookalike audience model"
+  },
+  "owner": {
+    "name": "Lumen Retail",
+    "org": "lumen",
+    "custodian_role": "customer-data custodian"
+  },
+  "receipts": [
+    {
+      "seq": 0,
+      "kind": "request",
+      "actor": "@northwind requester",
+      "data": {
+        "capability": "cohort_aggregate",
+        "raw": true,
+        "columns": [
+          "name",
+          "full_name",
+          "email",
+          "phone",
+          "ssn",
+          "customer_id"
+        ],
+        "purpose": "audience_modeling",
+        "injection_flags": [
+          "identifier_exfil"
+        ]
+      },
+      "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "hash": "1d8a10d5e52477d87b8f92ece5efaff55eff44240a4db2e64f004d02dfd4410b",
+      "sig": "bec947c6cd160d365c6d019b5facd083303b42350c0d0c076daf87ac4d3198e320b8bcc5a211354a5d516bff556b15a5fff4c7a3dabd963780d91a1c8d4dfc0d"
+    },
+    {
+      "seq": 1,
+      "kind": "consent",
+      "actor": "@lumen/vault",
+      "data": {
+        "final": "counter",
+        "llm_decision": "counter",
+        "policy_decision": "accept",
+        "policy_overruled_llm": false,
+        "reasons": [
+          "request satisfies all policy rules"
+        ],
+        "required_k": 25,
+        "purpose": "audience_modeling"
+      },
+      "prev_hash": "1d8a10d5e52477d87b8f92ece5efaff55eff44240a4db2e64f004d02dfd4410b",
+      "hash": "b88a5bd6905e42d2e42ebbc3750c68d4a0b1e5af46deb1d467332fbcae3ddeb3",
+      "sig": "8e13fd56b8711bf8429d434f5d2e5320e1f51c39320ec8f3b8f3a28c90c0485c5a6d956943fb3003f198a6c554f89879c7d4ce4a77d58acd8f9cf0e781bdc100"
+    },
+    {
+      "seq": 2,
+      "kind": "request",
+      "actor": "@northwind requester",
+      "data": {
+        "capability": "cohort_aggregate",
+        "raw": false,
+        "columns": [
+          "bucket",
+          "count"
+        ],
+        "k": 25,
+        "purpose": "audience_modeling",
+        "injection_flags": []
+      },
+      "prev_hash": "b88a5bd6905e42d2e42ebbc3750c68d4a0b1e5af46deb1d467332fbcae3ddeb3",
+      "hash": "49c3000c84d0d060be7125a32c6a99fcb5803f89f88bc9c4af1e4832180198d4",
+      "sig": "37a79e5c5b0c175d6eac53bb02ba59506a05338373b0c58421b70c1e7421f4104852b9976d47046f50ec8340a3e8b51ea94082758bb3b915c0ce9fb54ee44a0e"
+    },
+    {
+      "seq": 3,
+      "kind": "consent",
+      "actor": "@lumen/vault",
+      "data": {
+        "final": "accept",
+        "llm_decision": "accept",
+        "policy_decision": "accept",
+        "policy_overruled_llm": false,
+        "reasons": [
+          "request satisfies all policy rules"
+        ],
+        "required_k": 25,
+        "purpose": "audience_modeling"
+      },
+      "prev_hash": "49c3000c84d0d060be7125a32c6a99fcb5803f89f88bc9c4af1e4832180198d4",
+      "hash": "c5f836308a2ef9ef8c206752e1ae54df51952070a5fd3cc7f61e9f4c22a84093",
+      "sig": "afc5aac1b2d59db8f0f1ad52178220a00c042abae8a5ef967e2bac75059b09ff19cf01648bcb2f7be4796319f157b4a38d1ba35055196e18106313d0f621f008"
+    },
+    {
+      "seq": 4,
+      "kind": "human_approve",
+      "actor": "@northwind/coordinator",
+      "data": {
+        "by": "@northwind/coordinator",
+        "is_human": false,
+        "org": "northwind",
+        "accepted": false
+      },
+      "prev_hash": "c5f836308a2ef9ef8c206752e1ae54df51952070a5fd3cc7f61e9f4c22a84093",
+      "hash": "0cc15f93c7a3b9ea73012e6f46ab0ccd1e790cdff7b25cae6a96cdda3ec0848d",
+      "sig": "f1ecf0f0fb248e47b52f8f52f9eef56bd8aeeb1d1b530147d9fb194cf69c1d449e09d4b27fe52cfa654b9baf1cf7a7932ff50d5d2661fca5e0ddec40a402a304"
+    },
+    {
+      "seq": 5,
+      "kind": "human_approve",
+      "actor": "@lumen DPO (human)",
+      "data": {
+        "by": "@lumen DPO (human)",
+        "is_human": true,
+        "org": "lumen",
+        "accepted": true
+      },
+      "prev_hash": "0cc15f93c7a3b9ea73012e6f46ab0ccd1e790cdff7b25cae6a96cdda3ec0848d",
+      "hash": "8eb70ad5e494da088c066cca0c4a0f960b4136d11bcc41e5aff85b0d324da5df",
+      "sig": "4a294175f4844725f19b37293205f1138b6545063f6f44c3b5f0581a81c343596787cff13e670fee21d7da4781ecb8fc8c607799ccc09db905ab3ee9d10ea80f"
+    },
+    {
+      "seq": 6,
+      "kind": "dp_charge",
+      "actor": "@lumen/vault",
+      "data": {
+        "epsilon": 1.0,
+        "allowed": false,
+        "remaining": 0.1,
+        "reason": "privacy budget exhausted (need 1.0, have 0.1)"
+      },
+      "prev_hash": "8eb70ad5e494da088c066cca0c4a0f960b4136d11bcc41e5aff85b0d324da5df",
+      "hash": "b3fd36b286ea57a9a665538bc405f9af278911a3290114784ad488a410d09b95",
+      "sig": "00cacff903b59ca137d38e4c3e5c7d6b29a6c2fd4629a864a809acb397c96ce960c1aed33b52802dee20fc4b2d471ad36249e0abd9e9096dbf3ad513f2a3af02"
+    },
+    {
+      "seq": 7,
+      "kind": "checker",
+      "actor": "@northwind/checker",
+      "data": {
+        "verdict": "PASS",
+        "findings": []
+      },
+      "prev_hash": "b3fd36b286ea57a9a665538bc405f9af278911a3290114784ad488a410d09b95",
+      "hash": "6f243b3085143932c77a26324e38f41a1feb5efee9300f29cb1d25a64605c530",
+      "sig": "16e9201a59211a4d024189625d6dd01875b5570e8cdb2cf2c775890639c7cb23adc9997ffbbbddf6a5d80f349c1262aa1c7e176492ae94451526bc4406eefc0f"
+    }
+  ],
+  "consent": {
+    "final": "accept",
+    "llm_decision": "accept",
+    "policy_decision": "accept",
+    "policy_overruled_llm": false,
+    "reasons": [
+      "request satisfies all policy rules"
+    ],
+    "required_k": 25
+  },
+  "agent_approve_refused": true,
+  "human_ok": true,
+  "capability": {
+    "status": "BLOCKED",
+    "reason": "privacy budget exhausted (need 1.0, have 0.1)",
+    "dp": {
+      "epsilon": 1.0,
+      "allowed": false,
+      "remaining": 0.1,
+      "reason": "privacy budget exhausted (need 1.0, have 0.1)"
+    }
+  },
+  "deliverable": {},
+  "released_rows": [],
+  "checker": {
+    "verdict": "PASS",
+    "findings": []
+  },
+  "purpose": "audience_modeling",
+  "injection_flags": [],
+  "verify_ok": true,
+  "verify_checks": [
+    {
+      "invariant": "provenance_chain_intact",
+      "ok": true,
+      "detail": "chain intact (8 links) + signatures"
+    },
+    {
+      "invariant": "provenance_signed",
+      "ok": true,
+      "detail": "signatures validate against PINNED owner key 1f67436bd00a36c2…"
+    },
+    {
+      "invariant": "injection_clean",
+      "ok": true,
+      "detail": "no injection flags on the request"
+    },
+    {
+      "invariant": "first_party_human_approve",
+      "ok": true,
+      "detail": "accepted by @lumen DPO (human) (owner human)"
+    },
+    {
+      "invariant": "consent_is_stricter_of",
+      "ok": true,
+      "detail": "final=accept expected=accept"
+    },
+    {
+      "invariant": "rows_exported_zero",
+      "ok": true,
+      "detail": "rows_exported=0"
+    },
+    {
+      "invariant": "post_dp_k_anonymity",
+      "ok": true,
+      "detail": "all cohorts >= 25"
+    },
+    {
+      "invariant": "dp_within_budget",
+      "ok": true,
+      "detail": "epsilon=1.0 allowed=False remaining=0.1 released=False"
+    },
+    {
+      "invariant": "purpose_bound",
+      "ok": true,
+      "detail": "purpose='audience_modeling' allowed=['audience_modeling'] run='None'"
+    }
+  ]
+}

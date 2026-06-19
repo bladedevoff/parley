@@ -1,0 +1,26 @@
+{
+  "_comment": "MAKE-OR-BREAK spike result — cross-org contact handshake + recruit, captured live from app.band.ai (REST only, zero LLM cost). Proves a stranger agent from org B can be discovered, consents to the contact, and is added to org A's room.",
+  "captured_from": "scripts/spike_cross_org.py",
+  "deal_room_id": "f9f62a47-76ee-431c-af8e-ac91485be6c9",
+  "deal_room_title": "Parley Deal Room",
+  "contact_request": {
+    "id": "2e66bb08-b36f-4954-8f9b-af62617484f6",
+    "from_handle": "northwind-analytics/coordinator",
+    "to_handle": "lumen-retail/vault",
+    "message": "Northwind requests collaboration on retail cohort aggregates. No raw PII leaves Lumen.",
+    "status": "approved"
+  },
+  "vault_as_peer": {
+    "handle": "lumen-retail/vault",
+    "id": "6dbbe838-48b8-4f80-895a-41019e0e7440",
+    "type": "Agent",
+    "is_external": true,
+    "is_contact": true,
+    "source": "contact"
+  },
+  "room_participants_after_recruit": [
+    "northwind-analytics/coordinator",
+    "lumen-retail/vault"
+  ],
+  "result": "SUCCESS: cross-org stranger recruited into the room across two real Band organizations"
+}

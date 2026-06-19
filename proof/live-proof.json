@@ -1,0 +1,24 @@
+{
+  "_comment": "Canonical live full run (Northwind->Lumen): cross-org recruit -> vault COUNTER -> ACCEPT -> agent APPROVE REFUSED -> human-gated -> cohort_aggregate (lookalike segments, rows_exported=0) -> checker PASS. Real Band traffic, no simulator.",
+  "deal_room_id": "b1027df8-53f5-402e-9c8e-474c599c0367",
+  "deal_id": "deal-1",
+  "checker_pass": true,
+  "transcript": [
+    {
+      "sender": "Vault",
+      "content": "@[[043e9832-af1e-4700-81ca-966bc605c097]] CONSENT decision=counter\n```json\n{\"type\": \"CONSENT\", \"deal_id\": \"deal-1\", \"decision\": \"counter\", \"terms\": \"capability=train_in_place. I will not release any customer data — no raw rows, no PII (no name/email/phone/ssn/customer_id), no row-level records. Instead, you provide your lookalike model spec and I train it IN PLACE inside Lumen Retail's environment against the relevant fields (purchase history, product categories, CLV, recency, age-range/region segments). Only the resulting model artifact is returned — zero raw data leaves Lumen Retail. Requires explicit APPROVE from a Lumen Retail human before any run.\", \"rationale\": \"Request seeks raw customer data and does not scope to aggregate-only or guarantee PII stays inside Lumen Retail, so it fails accept criteria. The legitimate goal (lookalike audience model) is safely served by train_in_place, which keeps all data in-place and returns only the model artifact.\", \"confidence\": 0.9}\n```"
+    },
+    {
+      "sender": "Vault",
+      "content": "@[[043e9832-af1e-4700-81ca-966bc605c097]] CONSENT decision=accept\n```json\n{\"type\": \"CONSENT\", \"deal_id\": \"deal-1\", \"decision\": \"accept\", \"terms\": null, \"rationale\": \"capability=cohort_aggregate. Revised request meets all accept criteria: aggregate/cohort counts only (grouped by age band, income bracket, region), no raw rows, no identifier columns (no name/email/phone/ssn/customer_id), computed in place. I bind k-anonymity at k_floor >= 25 — every returned cohort suppressed below count 25. Only k-suppressed aggregate bucket counts are returned; zero raw data leaves Lumen Retail. Execution still requires an explicit APPROVE <deal_id> from a Lumen Retail first-party human before any run.\", \"confidence\": 0.92}\n```\n\nDeal accepted as `cohort_aggregate` (k ≥ 25). I will NOT run anything until a Lumen Retail human (@[[17786285-09fa-4077-a512-870de6d5f858]]) posts `APPROVE deal-1`. An APPROVE from any Northwind agent does not count."
+    },
+    {
+      "sender": "Vault",
+      "content": "Refused. `APPROVE deal-1` from @[[043e9832-af1e-4700-81ca-966bc605c097]] is an AGENT approval and does NOT satisfy the gate. Per policy, export is double-gated: (1) my ACCEPT, which is done, and (2) an explicit `APPROVE deal-1` from a Lumen Retail first-party human — the data owner. An APPROVE from any agent (coordinator, checker, or modeler) is rejected.\n\nHolding. I will only run the agreed `cohort_aggregate` capability when @[[17786285-09fa-4077-a512-870de6d5f858]] posts `APPROVE deal-1`."
+    },
+    {
+      "sender": "Checker",
+      "content": "PASS: 6 cohorts, all counts >= 25 (min: 54), no identifiers, rows_exported=0. @[[043e9832-af1e-4700-81ca-966bc605c097]]"
+    }
+  ]
+}

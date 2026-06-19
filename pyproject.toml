@@ -1,0 +1,32 @@
+[project]
+name = "parley"
+version = "0.1.0"
+description = "Parley — k-anonymous, consent-gated cross-org data negotiation on Band"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "band-sdk[claude-sdk]>=1.0.0",   # live agent runtime; pure modules import it lazily
+    "pydantic>=2",
+    "python-dotenv",
+    "pyyaml>=6",                      # scenario.yaml config layer
+    "cryptography>=41",              # Ed25519-signed provenance (tamper-proof, third-party verifiable)
+]
+
+[project.optional-dependencies]
+# Run the recruited stranger on a NON-Claude, OpenAI-compatible vendor
+# (Groq / OpenRouter / OpenAI / any /v1 endpoint). band-sdk[pydantic-ai] pulls
+# pydantic-ai-slim + openai, matched to the PydanticAIAdapter version.
+cross-vendor = [
+    "band-sdk[pydantic-ai]>=1.0.0",
+    "openai>=1.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

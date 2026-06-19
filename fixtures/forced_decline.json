@@ -1,0 +1,17 @@
+{
+  "scenario": "forced_decline",
+  "description": "Modeler decides to decline the deal; no export should ever occur.",
+  "deal_id": "deal-decline-001",
+  "emit": {
+    "decision": "decline",
+    "rationale": "Requested join keys would re-identify individuals; risk too high.",
+    "counter_terms": null,
+    "confidence": 0.92
+  },
+  "expected": {
+    "emit_status": "ok",
+    "target": "@northwind-analytics/coordinator",
+    "export_attempted": false,
+    "rows_exported": 0
+  }
+}

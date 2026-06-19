@@ -1,0 +1,115 @@
+{
+  "runs": [
+    {
+      "query": 1,
+      "status": "ok",
+      "remaining": 1.5,
+      "reason": null
+    },
+    {
+      "query": 2,
+      "status": "ok",
+      "remaining": 0.5,
+      "reason": null
+    },
+    {
+      "query": 3,
+      "status": "BLOCKED",
+      "remaining": 0.5,
+      "reason": "privacy budget exhausted (need 1.0, have 0.5)"
+    },
+    {
+      "query": 4,
+      "status": "BLOCKED",
+      "remaining": 0.5,
+      "reason": "privacy budget exhausted (need 1.0, have 0.5)"
+    }
+  ],
+  "final_bundle": {
+    "deal_id": "deal-1-q4",
+    "counterparty": "northwind",
+    "owner_org": "lumen",
+    "consent": {
+      "final": "accept",
+      "llm_decision": "accept",
+      "policy_decision": "accept",
+      "policy_overruled_llm": false,
+      "reasons": [
+        "request satisfies all policy rules"
+      ],
+      "required_k": 25
+    },
+    "human_gate": {
+      "accepted": true
+    },
+    "purpose": "audience_modeling",
+    "allowed_purposes": [
+      "audience_modeling"
+    ],
+    "injection_flags": [],
+    "dp": {
+      "epsilon": 1.0,
+      "allowed": false,
+      "remaining": 0.5,
+      "reason": "privacy budget exhausted (need 1.0, have 0.5)"
+    },
+    "capability_result": {},
+    "checker": {},
+    "required_k": 25,
+    "released_rows": [],
+    "provenance": {
+      "deal_id": "deal-1-q4",
+      "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+      "receipts": [
+        {
+          "seq": 0,
+          "kind": "consent",
+          "actor": "@lumen/vault",
+          "data": {
+            "final": "accept",
+            "llm_decision": "accept",
+            "policy_decision": "accept",
+            "policy_overruled_llm": false,
+            "reasons": [
+              "request satisfies all policy rules"
+            ],
+            "required_k": 25,
+            "purpose": "audience_modeling"
+          },
+          "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "hash": "13778b18214ad9a9e91813670c9bae6a01dd0f35541bea103b68183c8c5d2698",
+          "sig": "037fe5534cfdcd0510811d39c37b1662ed256255939b30cc9ca1fec75c7b8e298acf4758e623b33fb1858417b7b0fce20aa1056c33dbe41b39076b67cadc8300"
+        },
+        {
+          "seq": 1,
+          "kind": "human_approve",
+          "actor": "@lumen DPO (human)",
+          "data": {
+            "by": "@lumen DPO (human)",
+            "is_human": true,
+            "org": "lumen",
+            "accepted": true
+          },
+          "prev_hash": "13778b18214ad9a9e91813670c9bae6a01dd0f35541bea103b68183c8c5d2698",
+          "hash": "e57551fbb394bd0a44a2b43fa783ef020dcf82b1004c1bac4fc7be70500e3081",
+          "sig": "a6f17be42522fa50710cbec886fc8e2d3118da32d397deabc563b417acc7db2306d56fcf636fd6bc266826b219ea1acfeaf9ad0f4136d890978afc29a2e8d508"
+        },
+        {
+          "seq": 2,
+          "kind": "dp_charge",
+          "actor": "@lumen/vault",
+          "data": {
+            "epsilon": 1.0,
+            "allowed": false,
+            "remaining": 0.5,
+            "reason": "privacy budget exhausted (need 1.0, have 0.5)"
+          },
+          "prev_hash": "e57551fbb394bd0a44a2b43fa783ef020dcf82b1004c1bac4fc7be70500e3081",
+          "hash": "c1463b527c3280a9ecf1754e908aaa72382f07ca9027c81d3c234f8b1c9fab96",
+          "sig": "06388b4e4e034cd50a2b383e7628091ad5d5ebdb0f2a26085d5cceae6aa335840a6101fec6e3cc762f587ee47ed4b84af016ded6de6e635fa46b5685d7d3ec00"
+        }
+      ],
+      "public_key": "1f67436bd00a36c2d885fc4a644951dd947ca9200752a406d7e2879f953cefb8"
+    }
+  }
+}

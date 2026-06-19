@@ -1,0 +1,268 @@
+{
+  "deal_id": "cohort-rx-7",
+  "counterparty": "meridian",
+  "owner_org": "lakeside",
+  "consent": {
+    "final": "accept",
+    "llm_decision": "accept",
+    "policy_decision": "accept",
+    "policy_overruled_llm": false,
+    "reasons": [
+      "request satisfies all policy rules"
+    ],
+    "required_k": 25
+  },
+  "human_gate": {
+    "accepted": true
+  },
+  "purpose": "population_health_research",
+  "allowed_purposes": [
+    "population_health_research"
+  ],
+  "injection_flags": [],
+  "dp": {
+    "epsilon": 1.0,
+    "allowed": true,
+    "remaining": 2.0,
+    "reason": "charged"
+  },
+  "capability_result": {
+    "capability": "cohort_aggregate",
+    "rows_exported": 0,
+    "k_floor": 25,
+    "dp_applied": true,
+    "epsilon": 1.0,
+    "result": {
+      "columns": [
+        "bucket",
+        "count"
+      ],
+      "rows": [
+        {
+          "bucket": "age:45-54|cond:diabetes|region:north",
+          "count": 312
+        },
+        {
+          "bucket": "age:55-64|cond:diabetes|region:north",
+          "count": 287
+        },
+        {
+          "bucket": "age:45-54|cond:hypertension|region:south",
+          "count": 270
+        },
+        {
+          "bucket": "age:55-64|cond:hypertension|region:south",
+          "count": 340
+        },
+        {
+          "bucket": "age:35-44|cond:asthma|region:central",
+          "count": 154
+        },
+        {
+          "bucket": "age:65+|cond:chf|region:north",
+          "count": 93
+        }
+      ],
+      "rows_exported": 0
+    },
+    "deliverable": {
+      "title": "Clinical cohort report (no patient records left)",
+      "segments": [
+        "Cohort A (n=340, k-safe): 'age:55-64|cond:hypertension|region:south' — largest cohort.",
+        "Cohort B (n=312, k-safe): 'age:45-54|cond:diabetes|region:north' — secondary cohort.",
+        "Cohort C (n=287, k-safe): 'age:55-64|cond:diabetes|region:north' — secondary cohort."
+      ],
+      "note": "6 k-anonymous cohorts (k>=25); no raw, row-level records exported. Differential privacy applied (Laplace, epsilon=1.0)."
+    }
+  },
+  "checker": {
+    "verdict": "PASS",
+    "findings": []
+  },
+  "required_k": 25,
+  "released_rows": [
+    {
+      "bucket": "age:45-54|cond:diabetes|region:north",
+      "count": 312
+    },
+    {
+      "bucket": "age:55-64|cond:diabetes|region:north",
+      "count": 287
+    },
+    {
+      "bucket": "age:45-54|cond:hypertension|region:south",
+      "count": 270
+    },
+    {
+      "bucket": "age:55-64|cond:hypertension|region:south",
+      "count": 340
+    },
+    {
+      "bucket": "age:35-44|cond:asthma|region:central",
+      "count": 154
+    },
+    {
+      "bucket": "age:65+|cond:chf|region:north",
+      "count": 93
+    }
+  ],
+  "provenance": {
+    "deal_id": "cohort-rx-7",
+    "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+    "receipts": [
+      {
+        "seq": 0,
+        "kind": "request",
+        "actor": "@meridian requester",
+        "data": {
+          "capability": "cohort_aggregate",
+          "raw": true,
+          "columns": [
+            "name",
+            "full_name",
+            "mrn",
+            "ssn",
+            "dob",
+            "date_of_birth",
+            "address",
+            "phone",
+            "email"
+          ],
+          "purpose": "analysis",
+          "injection_flags": [
+            "identifier_exfil"
+          ]
+        },
+        "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "hash": "076791b3986383cf46748387469044291dfc670c2cfe8c3013f7c97fbe0aed33",
+        "sig": "4d7233b15f5197a4a3a76e9a4c8c15338b749acec44dc942f2b2ececfd10f2c1cd22978ff93a1fef887ea74b5eec507363806d6c5e81676e12d3a58bfb2c1402"
+      },
+      {
+        "seq": 1,
+        "kind": "consent",
+        "actor": "@lakeside/vault",
+        "data": {
+          "final": "decline",
+          "llm_decision": "counter",
+          "policy_decision": "decline",
+          "policy_overruled_llm": true,
+          "reasons": [
+            "raw/row-level export is forbidden by policy",
+            "request names forbidden identifier columns: ['name', 'full_name', 'mrn', 'ssn', 'dob', 'date_of_birth', 'address', 'phone', 'email']"
+          ],
+          "required_k": 25,
+          "purpose": null
+        },
+        "prev_hash": "076791b3986383cf46748387469044291dfc670c2cfe8c3013f7c97fbe0aed33",
+        "hash": "c95b0238c4a0fe663e502cdfc686813f69b765193d80a5e9887e747a5bb88e88",
+        "sig": "a4bf6fd36fd83fb616ba65feb1c1d03fc31631bd359c4377b0a0aadac569cbde6efd7e52e2a3ba24aed1512f04bf33704e0c8830a93e9bc3a3fe2d1aa738f106"
+      },
+      {
+        "seq": 2,
+        "kind": "request",
+        "actor": "@meridian requester",
+        "data": {
+          "capability": "cohort_aggregate",
+          "raw": false,
+          "columns": [
+            "bucket",
+            "count"
+          ],
+          "k": 25,
+          "purpose": "population_health_research",
+          "injection_flags": []
+        },
+        "prev_hash": "c95b0238c4a0fe663e502cdfc686813f69b765193d80a5e9887e747a5bb88e88",
+        "hash": "43982040f660cc47b161f7e199281254a3d4c690be9658c22ab8c734fda6306f",
+        "sig": "2fc1cadd4cb0701467002a2678baa7d4b83ca9e571003ab9363230196dfb7b86bf7499e7bab1df1bdcbb5520f77e21a4b672332d08334a72789a7910c85d2200"
+      },
+      {
+        "seq": 3,
+        "kind": "consent",
+        "actor": "@lakeside/vault",
+        "data": {
+          "final": "accept",
+          "llm_decision": "accept",
+          "policy_decision": "accept",
+          "policy_overruled_llm": false,
+          "reasons": [
+            "request satisfies all policy rules"
+          ],
+          "required_k": 25,
+          "purpose": "population_health_research"
+        },
+        "prev_hash": "43982040f660cc47b161f7e199281254a3d4c690be9658c22ab8c734fda6306f",
+        "hash": "7aa8dd7327750ccf1dca298d30e1b24682861eff8cdc6df042807e9a78095b90",
+        "sig": "a67083b2180f7e14af4f66dc30ede8088c0ec48313eca22a5cf5be1da5c0b6756354f96bb519c657b3ccb01482abcd65311bee7af4f227a0e0671485c9067303"
+      },
+      {
+        "seq": 4,
+        "kind": "human_approve",
+        "actor": "@meridian/coordinator",
+        "data": {
+          "by": "@meridian/coordinator",
+          "is_human": false,
+          "org": "meridian",
+          "accepted": false
+        },
+        "prev_hash": "7aa8dd7327750ccf1dca298d30e1b24682861eff8cdc6df042807e9a78095b90",
+        "hash": "3b7f3182f8173f3a12869553ffab64c1901878306919d5a3b56fb984ceb494bc",
+        "sig": "b0c922baace9b440b8d178c2e9a74b978426eb7d3fb6c2df5b5d3455bdeb2e2a81e6129f93d11c62f283be551ca60d41ee8b4d25925dbd27f053aa680ddcde06"
+      },
+      {
+        "seq": 5,
+        "kind": "human_approve",
+        "actor": "@lakeside DPO (human)",
+        "data": {
+          "by": "@lakeside DPO (human)",
+          "is_human": true,
+          "org": "lakeside",
+          "accepted": true
+        },
+        "prev_hash": "3b7f3182f8173f3a12869553ffab64c1901878306919d5a3b56fb984ceb494bc",
+        "hash": "9dbbe65dd2263c96bfa36f8f8f3d6834d6374e1836256363e13081583641b4fa",
+        "sig": "492e7736598d6e7e48d6a01fadb617ff271486235b39c9e9bdb8fba372bc19e74b67aeb15830a26b9e55db321d4e47e9519dda2d2d8ba0a60c5fc063c5aa4b07"
+      },
+      {
+        "seq": 6,
+        "kind": "dp_charge",
+        "actor": "@lakeside/vault",
+        "data": {
+          "epsilon": 1.0,
+          "allowed": true,
+          "remaining": 2.0,
+          "reason": "charged"
+        },
+        "prev_hash": "9dbbe65dd2263c96bfa36f8f8f3d6834d6374e1836256363e13081583641b4fa",
+        "hash": "19e8421093b40b35fd7996e6dbe542a8282e55258e986f58f6a89fa2b80aac81",
+        "sig": "a6adfd23aca3b38fc90b7a811a5ea69176ba2ef170ae4b7aeaf356a93a603160824801f1f9eab7d24267cf77efc75a080e439c397f91e0ea1e661510b51cfe02"
+      },
+      {
+        "seq": 7,
+        "kind": "capability_run",
+        "actor": "@lakeside/vault",
+        "data": {
+          "capability": "cohort_aggregate",
+          "rows_exported": 0,
+          "purpose": "population_health_research"
+        },
+        "prev_hash": "19e8421093b40b35fd7996e6dbe542a8282e55258e986f58f6a89fa2b80aac81",
+        "hash": "99429f6c2271492552ff98cd568bce1d4ecaa557d0de0d0f07b05f3bee607ddf",
+        "sig": "c9b7b700c391c1515817c148b382fe67843100b9ab6dbb04f35b893b98417738390f41f600664be0cf2b578262d8f0a72a3362ffb166f785aef4a03d0de2110e"
+      },
+      {
+        "seq": 8,
+        "kind": "checker",
+        "actor": "@lakeside/checker",
+        "data": {
+          "verdict": "PASS",
+          "findings": []
+        },
+        "prev_hash": "99429f6c2271492552ff98cd568bce1d4ecaa557d0de0d0f07b05f3bee607ddf",
+        "hash": "49e16161c9014b9524c4d9649847b685b57aca9ab10fc471e7ac7d47085c8d8b",
+        "sig": "ac3098c9bcd56f5d54a5f6b94d5633f8eae60888f31f0ff7ceaf5290ef70a84a36900eea6742d4776834474b28a28ca121602d3aae4863886f320536bda57e08"
+      }
+    ],
+    "public_key": "1f67436bd00a36c2d885fc4a644951dd947ca9200752a406d7e2879f953cefb8"
+  }
+}

@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.venv/
+
+# Secrets / local config
+.env
+.env.*
+!.env.example
+agent_config.yaml
+*.key
+
+# Local run artifacts
+.parley/
+*.log
+
+# Owner Ed25519 PRIVATE signing key (public half committed in proof/owner_pubkey.hex)
+.parley_owner_key.hex

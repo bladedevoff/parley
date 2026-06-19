@@ -1,0 +1,6 @@
+{
+  "allowed_purpose": "audience_modeling",
+  "consented_run": "ok",
+  "drifted_run": "BLOCKED",
+  "drift_reason": "purpose 'resale_to_third_party' not permitted; allowed ['audience_modeling']"
+}

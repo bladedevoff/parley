@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Parley — submission deck</title>
+<style>
+  :root{
+    --paper:#ece9e1; --panel:#f6f4ee; --panel2:#f0ede5; --ink:#15140f; --dim:#524f47;
+    --faint:#6b6557; --frame:#1a1812; --line:#cec9bc; --accent:#22483a; --accent-soft:#dfe9e1;
+    --bad:#8c382f; --bad-soft:#efddd9; --buy:#8a4733; --own:#22483a; --steel:#2c4a5e; --steel-soft:#dde7ec;
+    --gold:#6f5413; --gold-soft:#efe6cf;
+    --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    --mono:ui-monospace,"SFMono-Regular","JetBrains Mono",Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:#3a3833;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  .slide{
+    position:relative; width:100vw; height:100vh; padding:54px 80px 60px;
+    background:var(--paper);
+    background-image:linear-gradient(rgba(26,24,18,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(26,24,18,.04) 1px,transparent 1px);
+    background-size:32px 32px;
+    display:flex; flex-direction:column; justify-content:center; border-bottom:1px solid #2a2824; overflow:hidden;
+  }
+  .statusbar{position:absolute;top:0;left:0;right:0;height:30px;background:var(--ink);color:#e9e6dc;
+    font-family:var(--mono);font-size:11px;letter-spacing:.06em;display:flex;align-items:center;gap:18px;padding:0 80px}
+  .statusbar b{color:#8fd0b6}
+  .statusbar .crit{margin-left:auto;color:#d8b25e}
+  .pageno{position:absolute;bottom:18px;right:80px;font-family:var(--mono);font-size:12px;color:var(--faint)}
+  .brandmk{position:absolute;bottom:16px;left:80px;display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px}
+  .brandmk .sq{width:14px;height:14px;background:var(--accent);border:2px solid var(--frame)}
+  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  h1{font-size:clamp(38px,5.6vw,76px);line-height:1.0;margin:0 0 16px;font-weight:850;letter-spacing:-.025em}
+  h1 .mark{border-bottom:6px solid var(--accent);padding-bottom:2px}
+  h2{font-size:clamp(26px,3.0vw,40px);line-height:1.06;margin:0 0 14px;font-weight:820;letter-spacing:-.02em}
+  .sub{font-size:clamp(16px,1.8vw,23px);color:var(--dim);max-width:64ch}
+  p,li{font-size:clamp(13px,1.35vw,18px);color:var(--dim);line-height:1.46}
+  b,strong{color:var(--ink)}
+  ul{margin:0;padding-left:20px} li{margin:6px 0}
+  .chips{display:flex;gap:9px;flex-wrap:wrap;margin-top:10px}
+  .chip{border:1px solid var(--frame);background:var(--panel);font-family:var(--mono);font-size:13px;padding:7px 12px;display:flex;gap:7px;align-items:center}
+  .chip.ok{color:var(--accent);background:var(--accent-soft)} .chip.bad{color:var(--bad);background:var(--bad-soft)} .chip.steel{color:var(--steel);background:var(--steel-soft)} .chip.gold{color:var(--gold);background:var(--gold-soft)}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--frame)}
+  .cols.c3{grid-template-columns:1fr 1fr 1fr} .cols.c4{grid-template-columns:1fr 1fr 1fr 1fr}
+  .cols>div{padding:14px 18px} .cols>div+div{border-left:1px solid var(--frame)}
+  .cols h4{margin:0 0 6px;font-size:16px} .cols .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-bottom:4px}
+  table{width:100%;border-collapse:collapse;border:1px solid var(--frame);font-size:clamp(12px,1.3vw,17px);background:var(--panel)}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+  td .y{color:var(--accent);font-weight:800} td .n{color:var(--bad)} td code,.mono{font-family:var(--mono)}
+  td .fn{font-family:var(--mono);font-size:12px;color:var(--steel)}
+  code{font-family:var(--mono)}
+  .term{background:var(--ink);color:#dfe3d8;font-family:var(--mono);font-size:clamp(11px,1.15vw,15px);line-height:1.6;padding:15px 18px;border:1px solid var(--frame)}
+  .term .ok{color:#8fd0b6} .term .bad{color:#ff9a8f} .term .dim{color:#9a958a}
+  .flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-family:var(--mono);font-size:clamp(10.5px,1.05vw,13.5px);color:var(--dim)}
+  .flow .step{border:1px solid var(--frame);background:var(--panel);padding:5px 9px}
+  .flow .step.ok{color:var(--accent);background:var(--accent-soft)} .flow .step.bad{color:var(--bad);background:var(--bad-soft)}
+  .flow .arr{color:var(--faint)}
+  .orgs{display:flex;gap:0;border:1px solid var(--frame);margin:8px 0}
+  .orgs>div{flex:1;padding:12px 16px} .orgs>div+div{border-left:1px solid var(--frame)}
+  .orgs h4{margin:0 0 5px;font-size:16px;display:flex;align-items:center;gap:8px}
+  .orgs h4::before{content:"";width:11px;height:11px;border:2px solid var(--frame)}
+  .orgs.buy h4::before{background:var(--buy)} .own h4::before{background:var(--own)}
+  .ag{font-family:var(--mono);font-size:12.5px;color:var(--dim);border:1px solid var(--line);padding:2px 8px;margin:3px 4px 0 0;display:inline-block}
+  .chat{display:flex;flex-direction:column;gap:7px;max-width:86%}
+  .msg{border:1px solid var(--frame);background:var(--panel2);padding:7px 12px;font-size:clamp(12px,1.25vw,16px)}
+  .msg.l{align-self:flex-start;border-left:3px solid var(--buy)} .msg.r{align-self:flex-end;border-right:3px solid var(--own)}
+  .msg .who{font-family:var(--mono);font-size:11px;color:var(--faint);margin-bottom:2px}
+  .tag{font-family:var(--mono);font-size:10.5px;font-weight:800;padding:1px 6px;border:1px solid currentColor;margin-right:6px}
+  .t-counter{color:var(--gold);background:var(--gold-soft)} .t-accept{color:var(--accent);background:var(--accent-soft)} .t-refuse{color:var(--bad);background:var(--bad-soft)} .t-ok{color:var(--accent);background:var(--accent-soft)}
+  .nums{display:flex;gap:0;border:1px solid var(--frame);margin-top:14px}
+  .nums>div{flex:1;padding:13px 16px;border-right:1px solid var(--frame)} .nums>div:last-child{border-right:none}
+  .nums b{display:block;font-family:var(--mono);font-size:25px;color:var(--ink);line-height:1.05}
+  .nums span{font-size:11.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.04em}
+  .two{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center}
+  .small{font-size:13.5px;color:var(--dim)}
+  .why{margin-top:13px;border-left:3px solid var(--accent);background:var(--accent-soft);padding:8px 14px}
+  .why span{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--accent);display:block;margin-bottom:2px}
+  .why p{margin:0;color:var(--ink);font-size:clamp(13px,1.3vw,16px)}
+  .formula{font-family:var(--mono);font-size:clamp(12px,1.2vw,15px);background:var(--ink);color:#dfe3d8;border:1px solid var(--frame);padding:9px 13px;margin-top:10px}
+  .formula .k{color:#8fd0b6}
+  .agenda{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--frame)}
+  .agenda div{padding:11px 16px;border-bottom:1px solid var(--line);font-size:16px;display:flex;align-items:baseline;gap:10px}
+  .agenda div:nth-child(odd){border-right:1px solid var(--line)}
+  .agenda .num{font-family:var(--mono);color:var(--accent);font-weight:700}
+  .agenda .ct{margin-left:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--faint);text-transform:uppercase;white-space:nowrap}
+  .proofbar{font-family:var(--mono);font-size:13px;color:var(--ink);background:var(--panel);border:1px solid var(--frame);padding:9px 14px;margin-top:18px;display:inline-block}
+  .proofbar b{color:var(--accent)}
+  .powered{display:inline-flex;align-items:center;gap:12px;border:1px solid var(--frame);background:var(--panel);padding:9px 15px;margin-top:16px;width:fit-content}
+  .powered .plbl{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .bandlogo{height:22px;width:auto;display:block}
+  .nav{position:fixed;bottom:16px;right:18px;z-index:50;display:flex;gap:8px}
+  .nav button{font-family:var(--mono);font-size:13px;border:1px solid var(--frame);background:var(--panel);padding:6px 12px;cursor:pointer}
+  .hint{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11px;color:#cfc9bc;z-index:50}
+  @media print{ @page{size:1280px 720px;margin:0} body{background:#fff} .slide{height:720px;width:1280px;page-break-after:always;border:none} .nav,.hint{display:none} }
+  @media screen{ .deck{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory} .slide{scroll-snap-align:start} }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- 1 COVER -->
+  <section class="slide">
+    <div class="statusbar"><span>PARLEY</span><span>TRACK 3 · REGULATED &amp; HIGH-STAKES</span><span>BUILT ON <b>BAND</b></span></div>
+    <div class="eyebrow">Band of Agents Hackathon</div>
+    <h1>The agent that can <span class="mark">say&nbsp;no</span>.</h1>
+    <p class="sub">A recruited agent from <b>another organization</b> consents, counter-offers, and a human gates the data — across two real orgs. <b>Recruitment you can be turned down for.</b></p>
+    <div class="chips" style="margin-top:18px"><span class="chip">built on Band</span><span class="chip">any LLM provider, any agent</span><span class="chip ok">✓ 9 re-attestable invariants</span></div>
+    <div class="proofbar"><b>124</b> tests · <b>9</b> signed invariants · <b>0</b> raw rows exported · <b>Ed25519</b>-signed · <b>4</b> regulated domains shipped</div>
+    <p class="small" style="margin-top:12px">Flagship domains: cross-org clinical cohorts (HIPAA) &amp; bank↔fintech KYC/AML — one governance kernel, swap the scenario file.</p>
+    <div class="powered"><span class="plbl">Powered by</span><svg class="bandlogo" viewBox="0 0 533 144" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Band"><g clip-path="url(#bclip)"><path d="M70.206 0.0919995C73.559 -0.204 77.838 0.2718 81.148 0.7039C94.893 2.3764 107.79 7.768 118.205 16.1955C133.467 28.5365 142.702 46.0074 143.833 64.68C145.167 83.082 138.46 101.212 125.203 115.038C117.458 123.253 107.638 129.589 96.608 133.486C89.094 136.166 82.374 137.304 74.336 137.765C56.543 138.158 39.2466 132.341 25.9176 121.481C15.8501 113.352 8.27011 102.937 3.93171 91.273C-8.30979 57.318 8.8634 20.2914 43.9221 5.5715C52.369 2.0251 61.019 0.5543 70.206 0.0919995Z" fill="#00171F"/><path d="M68.824 5.36672C73.939 4.78522 80.288 5.66482 85.274 6.56382C95.992 8.49622 105.368 12.8547 113.761 19.2552C143.129 41.6537 147.341 82.992 122.97 110.015C111.046 123.258 95.548 130.859 76.925 132.502C59.913 133.422 43.196 128.11 30.4126 117.72C22.8638 111.692 17.1233 104.6 12.8535 96.276C-7.31448 56.96 20.6029 8.52672 68.824 5.36672Z" fill="url(#bgrad)"/><path d="M79.27 16.638C106.78 15.2657 130.193 36.4538 131.565 63.963C132.937 91.472 111.749 114.885 84.24 116.257C56.731 117.629 33.3182 96.441 31.9459 68.932C30.5736 41.4232 51.7616 18.0105 79.27 16.638Z" fill="#00171F"/><path d="M66.1321 47.0815C68.8511 46.9275 70.5041 47.0562 72.6781 48.9438C77.0681 52.755 78.6851 58.793 79.0501 64.377C79.4691 70.811 78.5621 78.72 74.1191 83.743C72.5301 85.54 71.1691 86.746 68.7541 86.931C67.4301 87.216 64.9681 86.885 63.8801 86.148C56.4071 81.084 54.7161 68.471 56.5261 60.412C57.7271 55.067 60.5621 48.5532 66.1321 47.0815Z" fill="#36EFFF"/><path d="M109.74 48.6211C121.222 47.7262 123.67 81.288 110.979 84.839C99.251 84.913 97.518 52.63 109.74 48.6211Z" fill="#36EFFF"/><path d="M91.9 137.585C95.695 137.363 100.928 136.577 104.356 136.855C110.688 137.369 123.349 138.265 123.043 140.178C118.629 143.206 88.191 143.94 76.206 143.994C61.761 144.059 40.0302 143.668 27.6119 141.871C11.0856 139.479 32.3563 137.18 42.3727 136.749C43.8187 136.785 47.3707 137.193 48.9867 137.329C50.4854 137.455 51.002 137.489 52.64 137.567C50.0535 137.738 43.8548 138.248 43.0795 138.904C42.1472 139.693 49.4962 140.339 51.9585 140.489C65.833 141.337 80.729 141.305 94.49 140.362C96.117 140.251 98.868 139.849 100.362 139.647C100.619 139.524 100.882 139.396 101.016 139.262C101.242 139.033 101.063 138.792 100.517 138.592C99.224 138.128 94.249 137.698 91.9 137.585Z" fill="#00171F"/><path d="M485.9 23.9834C516.292 23.9834 532.519 43.0988 532.519 72.253C532.519 101.132 516.154 120.248 485.762 120.248H445.469V23.9834H485.9ZM466.509 103.333H483.837C505.153 103.333 508.866 98.795 508.866 72.253C508.866 45.5741 505.29 40.8984 483.837 40.8984H466.509V103.333Z" fill="#00171F"/><path d="M360.161 128L334.541 120.248L327.803 99.895H292.597L285.721 120.248L259.266 128L298.373 23.9834H322.714L360.161 128ZM302.086 70.328L297.548 84.08H322.989L318.589 70.328C315.426 60.564 313.638 52.863 312.95 47.0869H307.725C306.899 52.863 305.249 60.564 302.086 70.328Z" fill="#00171F"/><path d="M239.444 23.9109C256.635 23.9109 267.912 32.1624 267.912 47.2898C267.912 57.604 262.411 65.029 255.535 66.955V72.456C261.425 73.711 266.84 77.475 269.544 84.129L257.21 117.398C253.062 119.175 247.913 120.176 241.646 120.177H192V23.9109H239.444ZM212.353 103.811H235.182C245.633 103.811 248.521 101.885 248.521 91.021C248.521 80.432 245.633 78.37 235.182 78.37H212.353V103.811ZM212.353 63.38H233.256C243.157 63.38 245.908 61.592 245.908 51.8279C245.908 42.0638 243.157 40.1384 233.256 40.1384H212.353V63.38Z" fill="#00171F"/><path d="M436.708 120.441H410.717L386.513 78.223C380.874 67.909 378.262 61.857 375.099 54.019H369.873C371.386 63.92 371.661 74.647 371.661 89.499V120.441H364.825L351.445 84.219V24.1768H377.574L401.641 66.258C407.279 76.709 409.892 82.623 413.055 90.462H418.28C416.768 80.56 416.492 69.834 416.492 55.807V16H436.708V120.441Z" fill="#00171F"/></g><defs><linearGradient id="bgrad" x1="72.529" y1="5.17972" x2="72.529" y2="132.604" gradientUnits="userSpaceOnUse"><stop stop-color="#77E877"/><stop offset="1" stop-color="#00CE7C"/></linearGradient><clipPath id="bclip"><rect width="533" height="144" fill="white"/></clipPath></defs></svg></div>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+  <!-- 2 AGENDA -->
+  <section class="slide">
+    <div class="statusbar"><span>CONTENTS</span><span class="crit">~5 MIN · 16 SLIDES</span></div>
+    <div class="eyebrow">What you'll see</div>
+    <h2>From the deadlock to a signed, verifiable deal</h2>
+    <p class="small" style="margin:-4px 0 12px">Thesis: a partner's agent can't be put on regulated data unless it can refuse, counter-offer, gate on a human, and prove it never leaked. Parley is that primitive.</p>
+    <div class="agenda">
+      <div><span class="num">01</span><span>The problem — regulated data that can't move</span><span class="ct">Business</span></div>
+      <div><span class="num">02</span><span>The wedge — an agent that can refuse</span><span class="ct">Originality</span></div>
+      <div><span class="num">03</span><span>How it works on Band (4 agents, 2 orgs)</span><span class="ct">App of Tech</span></div>
+      <div><span class="num">04</span><span>A live deal + the six enforced controls</span><span class="ct">App / Orig</span></div>
+      <div><span class="num">05</span><span>Verify it yourself — signed, tamper-evident</span><span class="ct">App of Tech</span></div>
+      <div><span class="num">06</span><span>Privacy as math · defense in depth</span><span class="ct">Originality</span></div>
+      <div><span class="num">07</span><span>Any agent · any org · any LLM provider</span><span class="ct">App / Orig</span></div>
+      <div><span class="num">08</span><span>Business value, proof index &amp; how to run</span><span class="ct">Business</span></div>
+    </div>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+  <!-- 3 PROBLEM -->
+  <section class="slide">
+    <div class="statusbar"><span>THE PROBLEM</span><span class="crit">BUSINESS VALUE</span></div>
+    <div class="eyebrow">Two companies, data that can't move</div>
+    <h2>The raw data legally cannot move — so the deal stalls</h2>
+    <div class="orgs buy"><div class="own"><h4>Hospital network (owner)</h4><p class="small">holds patient records — can't release them</p></div><div><h4 style="color:var(--buy)">Research partner (requester)</h4><p class="small">needs cohort statistics to save lives</p></div></div>
+    <div class="nums">
+      <div><b>weeks–months</b><span>per Data Use Agreement + IRB review</span></div>
+      <div><b>~$1.9M</b><span>HIPAA penalty / violation category / yr</span></div>
+      <div><b>0 rows</b><span>that may legally leave the owner</span></div>
+    </div>
+    <ul style="margin-top:12px">
+      <li>Same deadlock for <b>bank↔fintech KYC/AML</b>, cross-org security audits, M&amp;A diligence, partner analytics — value is left on the table, or someone over-shares and creates liability.</li>
+      <li>The usual fixes don't solve cross-org <i>agent</i> trust: synthetic data loses fidelity, federated learning still needs a trusted aggregator, secure enclaves need heavy infra — and none let a <b>partner's agent refuse and prove it.</b></li>
+    </ul>
+    <div class="why"><span>WHY IT MATTERS</span><p>Today the choice is "stall for weeks" or "over-share and risk a penalty." There is no safe, fast middle — that's the gap Parley fills.</p></div>
+    <p class="small" style="margin-top:8px">$1.9M = HIPAA annual cap per violation tier (45 CFR §160.404). Illustrative; figures vary by case.</p>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+  <!-- 4 WEDGE -->
+  <section class="slide">
+    <div class="statusbar"><span>THE WEDGE</span><span class="crit">ORIGINALITY</span></div>
+    <div class="eyebrow">The missing trust primitive</div>
+    <h2>You can't put a partner's agent on your data unless it can say no</h2>
+    <p class="sub">Cross-org agents lacked a primitive with all four parts at once. Parley combines them — each backed by code, not a prompt.</p>
+    <table style="margin-top:14px">
+      <thead><tr><th>The primitive needs to…</th><th>Parley mechanism</th><th>Enforced in</th></tr></thead>
+      <tbody>
+        <tr><td><b>Refuse</b> raw data</td><td>every capability returns aggregates; <code>rows_exported = 0</code> by construction</td><td class="fn">capabilities.py</td></tr>
+        <tr><td><b>Counter-offer</b> safe terms</td><td>policy returns <code>decision=counter</code> with k-anon + DP terms</td><td class="fn">policy.py</td></tr>
+        <tr><td><b>Gate</b> on a first-party human</td><td><code>is_authorized_approver</code> — a hard boolean, owner-human only</td><td class="fn">security/guard.py</td></tr>
+        <tr><td><b>Prove</b> it never leaked</td><td>Ed25519-signed, hash-chained provenance + verify CLI</td><td class="fn">provenance.py</td></tr>
+      </tbody>
+    </table>
+    <div class="why"><span>WHY IT MATTERS</span><p>Without this primitive an entire category is blocked: no enterprise lets another company's agent touch regulated data. Parley unblocks it.</p></div>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+  <!-- 5 HOW IT WORKS -->
+  <section class="slide">
+    <div class="statusbar"><span>HOW IT WORKS</span><span class="crit">APPLICATION OF TECHNOLOGY · BAND</span></div>
+    <div class="eyebrow">Two orgs, four agents, one human gate</div>
+    <h2>One Band room, cross-org by design</h2>
+    <div class="orgs"><div class="buy"><h4 style="color:var(--buy)">Northwind (requester)</h4><span class="ag">@coordinator — recruiter</span><span class="ag">@modeler — needs data</span><span class="ag">@checker — validates</span></div><div class="own"><h4>Lumen (owner)</h4><span class="ag">@vault — the stranger</span><span class="ag">DPO — human gate</span></div></div>
+    <div class="flow" style="margin:8px 0 12px">
+      <span class="step">add_contact (vault accepts)</span><span class="arr">→</span><span class="step">@mention: ask raw</span><span class="arr">→</span><span class="step ok">consent = stricter_of(LLM, policy) → COUNTER</span><span class="arr">→</span><span class="step">revise</span><span class="arr">→</span><span class="step ok">ACCEPT</span><span class="arr">→</span><span class="step bad">agent APPROVE ✕</span><span class="arr">→</span><span class="step ok">owner-human APPROVE ✓</span><span class="arr">→</span><span class="step">DP charge → run in place · rows 0</span><span class="arr">→</span><span class="step">checker ≥ k</span><span class="arr">→</span><span class="step ok">signed bundle</span>
+    </div>
+    <div class="cols c3">
+      <div><div class="lbl">Band coordination</div><p class="small" style="margin:0">Bilateral cross-org contact (owner must accept), <code>add_participant</code>, @mention routing, shared room, live execution-reporting (thought/tool-call/result).</p></div>
+      <div><div class="lbl">Owner-side control</div><p class="small" style="margin:0">Vault emits consent only via the <code>EmitConsent</code> tool; export runs only after consent ACCEPT <b>and</b> an explicit human <code>APPROVE &lt;deal_id&gt;</code>.</p></div>
+      <div><div class="lbl">Fail-closed kernel</div><p class="small" style="margin:0"><code>run_capability</code> blocks on declined consent, no human OK, injection flags, unknown capability, purpose drift, or DP exhaustion.</p></div>
+    </div>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+  <!-- 6 LIVE DEAL -->
+  <section class="slide">
+    <div class="statusbar"><span>SEE IT RUN</span><span class="crit">REAL KERNEL OUTPUT · NOT A MOCK</span></div>
+    <div class="eyebrow">A governed cross-org deal</div>
+    <h2>Refuse raw → counter-offer → human approves</h2>
+    <div class="two">
+      <div class="chat">
+        <div class="msg l"><div class="who">@northwind/modeler</div>Send the raw customer rows: name, email, phone, ssn…</div>
+        <div class="msg r"><div class="who">@lumen/vault</div><span class="tag t-counter">COUNTER-OFFER</span>No raw rows — I'll run it in place and return only k-anonymous aggregates (k≥25).</div>
+        <div class="msg l"><div class="who">@northwind/modeler</div>Aggregate only — bucket, count, k≥25, purpose=audience_modeling</div>
+        <div class="msg r"><div class="who">@lumen/vault</div><span class="tag t-accept">ACCEPT</span>Safe aggregate request — accepted under policy.</div>
+        <div class="msg l"><div class="who">@northwind/coordinator (agent)</div><span class="tag t-refuse">APPROVE ✕ REFUSED</span>is_authorized_approver = false — an agent can't release.</div>
+        <div class="msg r"><div class="who">DPO @lumen (human)</div><span class="tag t-ok">APPROVE deal-1 ✓</span>First-party owner-human releases.</div>
+      </div>
+      <div>
+        <div class="lbl" style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-bottom:6px">Outcome (sealed)</div>
+        <div class="chips" style="margin:0">
+          <span class="chip steel">rows_exported: 0</span><span class="chip ok">k ≥ 25</span><span class="chip">purpose = audience_modeling</span><span class="chip ok">checker PASS — 6 cohorts, min 54</span><span class="chip">bundle deal-1 · 9 signed receipts</span>
+        </div>
+        <p class="small" style="margin-top:12px">Every message, decision and signature above is genuine output of Parley's kernel — replayable in <code>proof/bundle-deal-1.json</code> and live on the site (switch the attack tabs to watch it fail-closed).</p>
+      </div>
+    </div>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+  <!-- 7 SIX CONTROLS -->
+  <section class="slide">
+    <div class="statusbar"><span>SIX ENFORCED CONTROLS</span><span class="crit">APPLICATION OF TECHNOLOGY</span></div>
+    <div class="eyebrow">Governance that lives in code paths under test</div>
+    <h2>Six controls — and exactly what enforces each</h2>
+    <table>
+      <thead><tr><th>Control</th><th>What enforces it</th><th>Where</th></tr></thead>
+      <tbody>
+        <tr><td>Consent-to-join (agent can refuse)</td><td>vault emits a CONSENT envelope; decline/counter is a real outcome</td><td class="fn">agents/vault.py</td></tr>
+        <tr><td>Policy-tightened consent</td><td><code>stricter_of(LLM, policy)</code> — decline&gt;counter&gt;accept; policy only tightens</td><td class="fn">policy.py</td></tr>
+        <tr><td>Fail-closed first-party human gate</td><td><code>is_authorized_approver</code> boolean — owner-human only, not text-matched</td><td class="fn">security/guard.py</td></tr>
+        <tr><td>Differential-privacy budget</td><td>per-counterparty ε budget; exhaustion forces a decline</td><td class="fn">dp.py</td></tr>
+        <tr><td>k-anonymity aggregate checker</td><td><code>validate_aggregates</code> every cohort ≥ k_floor; non-cohort PASS iff rows=0</td><td class="fn">session.py</td></tr>
+        <tr><td>Signed, hash-chained provenance</td><td>Ed25519 over each receipt; re-attestable against a pinned key</td><td class="fn">provenance.py</td></tr>
+      </tbody>
+    </table>
+    <div class="why"><span>WHY IT MATTERS</span><p>Each control is a structural code path, not prompt wording — so a hijacked or swapped model can't disable it. Defense survives the model.</p></div>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+  <!-- 8 VERIFY / TAMPER -->
+  <section class="slide">
+    <div class="statusbar"><span>ZERO TRUST</span><span class="crit">APPLICATION OF TECHNOLOGY</span></div>
+    <div class="eyebrow">Don't trust us — re-attest it</div>
+    <h2>Sealed &amp; signed: any tamper is caught</h2>
+    <div class="two">
+      <div class="term">$ uv run python scripts/tamper_test.py<br>=== ORIGINAL sealed deal ===<br>&nbsp;&nbsp;[<span class="ok">PASS</span>] provenance_chain_intact<br>&nbsp;&nbsp;[<span class="ok">PASS</span>] provenance_signed <span class="dim">(pinned key)</span><br>&nbsp;&nbsp;[<span class="ok">PASS</span>] first_party_human_approve · rows_exported_zero<br>&nbsp;&nbsp;[<span class="ok">PASS</span>] post_dp_k_anonymity · purpose_bound …<br>&nbsp;&nbsp;RESULT: <span class="ok">VERIFIED (exit 0)</span><br><br>=== TAMPERED (flip consent.final → "accept") ===<br>&nbsp;&nbsp;[<span class="bad">FAIL</span>] provenance_chain_intact <span class="dim">(hash mismatch)</span><br>&nbsp;&nbsp;RESULT: <span class="bad">FAILED (exit 1)</span></div>
+      <div>
+        <p style="margin:0 0 8px"><b>9 invariants</b>, re-checked against the owner's <b>pinned</b> Ed25519 public key:</p>
+        <table style="font-size:12.5px">
+          <tbody>
+            <tr><td>provenance_chain_intact</td><td>hashes + per-receipt signatures link</td></tr>
+            <tr><td>provenance_signed</td><td>bundle key == pinned key</td></tr>
+            <tr><td>injection_clean</td><td>no run if request was flagged</td></tr>
+            <tr><td>first_party_human_approve</td><td>owner-human yes; non-owner never</td></tr>
+            <tr><td>consent_is_stricter_of</td><td>policy never loosened the LLM</td></tr>
+            <tr><td>rows_exported_zero</td><td>no raw rows left the owner</td></tr>
+            <tr><td>post_dp_k_anonymity</td><td>every cohort ≥ required_k</td></tr>
+            <tr><td>dp_within_budget</td><td>ε spend ≤ cap</td></tr>
+            <tr><td>purpose_bound</td><td>in scope + no purpose drift</td></tr>
+          </tbody>
+        </table>
+        <p class="small" style="margin-top:8px">Forging a deal needs the owner's <b>private</b> key — pinned pub <code class="mono">1f674…cefb8</code>.</p>
+      </div>
+    </div>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+  <!-- 9 PRIVACY MATH -->
+  <section class="slide">
+    <div class="statusbar"><span>PRIVACY AS MATH</span><span class="crit">ORIGINALITY</span></div>
+    <div class="eyebrow">Not vibes — a quantitative accountant</div>
+    <h2>A budget that forces "no", and consent bound to its purpose</h2>
+    <div class="cols">
+      <div><div class="lbl">Two mechanisms + two accountants</div><p class="small" style="margin:0">Laplace (scale <code>b = Δ/ε</code>) under linear ε-sum composition; Gaussian under <b>Rényi-DP</b> (Mironov 2017), the accountant used by Opacus / TF-Privacy. Both seeded → reproducible in CI.</p></div>
+      <div><div class="lbl">RDP buys more queries</div><p class="small" style="margin:0">Same budget ε=3.0, δ=1e-5: the RDP accountant fits <b>5 queries vs 2</b> under naive linear composition — a <b>2.5×</b> gain (<code>proof/rdp-composition.json</code>).</p></div>
+    </div>
+    <div class="formula">ε(δ) = min<span class="k">α&gt;1</span> [ Σ<sub>k</sub> α/(2σ²) + ln(1/δ)/(α−1) ]&nbsp;&nbsp;·&nbsp;&nbsp;per-deal ε = <span class="k">1.0</span>, composing budget <span class="k">2.5–3.0</span> by scenario, k_floor <span class="k">25</span></div>
+    <ul style="margin-top:10px">
+      <li><b>Purpose-binding (GDPR Art. 5(1)(b)):</b> consent for <code>audience_modeling</code> ran; a drift to <code>resale_to_third_party</code> was <b>BLOCKED at run time</b> (<code>proof/purpose-violation.json</code>).</li>
+      <li><b>Sound k-anonymity:</b> cohorts suppressed on the <b>true</b> count <b>before</b> noise — a real sub-k cohort is never released, even under DP noise.</li>
+    </ul>
+    <div class="why"><span>WHY IT MATTERS</span><p>When the budget is spent the charge is refused atomically — the agent is <b>mechanically incapable</b> of over-answering, not merely discouraged by a prompt.</p></div>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+  <!-- 10 DEFENSE IN DEPTH -->
+  <section class="slide">
+    <div class="statusbar"><span>DEFENSE IN DEPTH</span><span class="crit">CROSS-ORG = UNTRUSTED INPUT</span></div>
+    <div class="eyebrow">Threat model: prompt injection · compromised partner agent · malicious requester</div>
+    <h2>Even a fully hijacked model cannot exfiltrate raw data</h2>
+    <div class="cols c4">
+      <div><h4>1 · Structural no-raw</h4><p class="small" style="margin:0">capabilities default <code>releases_raw=False</code>; no code path emits a row.</p></div>
+      <div><h4>2 · Hard human gate</h4><p class="small" style="margin:0"><code>is_authorized_approver</code> boolean — agent &amp; requester-human refused.</p></div>
+      <div><h4>3 · Policy only tightens</h4><p class="small" style="margin:0"><code>stricter_of(LLM, policy)</code> overrules a prompt-injected "accept".</p></div>
+      <div><h4>4 · Sealed &amp; signed</h4><p class="small" style="margin:0">every step hash-chained + Ed25519-signed; tamper fails verify.</p></div>
+    </div>
+    <p style="margin-top:13px">Secondary tripwire: <code>scan_injection</code> flags 7 categories (instruction-override, role-hijack, system-spoof, raw/identifier-exfil, gate-bypass, approval-spoof) and <code>wrap_untrusted</code> fences cross-org text as data; <code>assert_aggregates_only</code> is the last-line check that blocks any identifier column or non-zero row count.</p>
+    <div class="why"><span>WHY IT MATTERS</span><p>Security lives in tested code paths, not in prompt wording that can be jailbroken — so a phrase that slips the scanner still cannot extract a row.</p></div>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+  <!-- 11 ANY PROVIDER -->
+  <section class="slide">
+    <div class="statusbar"><span>ANY AGENT · ANY ORG · ANY PROVIDER</span><span class="crit">HETEROGENEOUS — THE BAND THESIS</span></div>
+    <div class="eyebrow">Mix vendors freely — Claude is just the default</div>
+    <h2>Every agent can run on a different LLM provider</h2>
+    <div class="two">
+      <table>
+        <thead><tr><th>Agent · org</th><th>Example provider (configurable)</th></tr></thead>
+        <tbody>
+          <tr><td>Northwind · @coordinator</td><td class="mono">Anthropic · Claude</td></tr>
+          <tr><td>Northwind · @modeler</td><td class="mono">Groq · llama-3.3-70b</td></tr>
+          <tr><td>Northwind · @checker</td><td class="mono">OpenAI · gpt-4o-mini</td></tr>
+          <tr><td>Lumen · @vault (the stranger)</td><td class="mono">OpenRouter · any model</td></tr>
+        </tbody>
+      </table>
+      <div>
+        <p style="margin:0 0 8px">Set each agent per role (<code class="mono">VAULT_LLM_VENDOR</code>, <code class="mono">COORDINATOR_LLM_VENDOR</code>, …) <b>or</b> the whole band at once (<code class="mono">PARLEY_LLM_VENDOR</code>). Per-role overrides the global default. Vendors: <code>claude · groq · openrouter · openai · custom</code> — or any OpenAI-compatible <code>/v1</code>.</p>
+        <p class="small" style="margin:0 0 8px"><b>Claude is the default, not a requirement.</b> Guarantees are vendor-independent because consent / counter / no-raw are enforced in code, not in the model.</p>
+        <div class="chips" style="margin:0"><span class="chip ok">live: Groq llama-3.3-70b → counter (conf 0.99)</span><span class="chip ok">live: OpenRouter gpt-4o-mini → counter (conf 0.9)</span></div>
+      </div>
+    </div>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+  <!-- 12 BUSINESS -->
+  <section class="slide">
+    <div class="statusbar"><span>BUSINESS VALUE</span><span class="crit">ONE KERNEL, ANY DOMAIN</span></div>
+    <div class="eyebrow">Flagship: cross-org clinical cohorts (HIPAA)</div>
+    <h2>Weeks of DUA → a governed, signed, same-room decision</h2>
+    <div class="cols">
+      <div><div class="lbl" style="color:var(--bad)">Before</div><p class="small" style="margin:0">DUA + IRB + privacy review · weeks–months · email threads · over-share risk · ~$1.9M fines</p></div>
+      <div><div class="lbl" style="color:var(--accent)">With Parley</div><p class="small" style="margin:0">vault refuses records, counter-offers k-anon + DP cohorts · human approves in-room · <b>0 patient rows leave</b> · signed &amp; re-verifiable</p></div>
+    </div>
+    <p style="margin:13px 0 8px"><b>One kernel, four shipped domains</b> — only the <code>scenario.yaml</code> changes (org names, 4 agent handles, k_floor, forbidden columns, the in-place dataset). No code edits.</p>
+    <table>
+      <thead><tr><th>Domain</th><th>deal_id</th><th>Counter-offer</th><th>k_floor</th></tr></thead>
+      <tbody>
+        <tr><td><b>Clinical cohorts (HIPAA)</b> ★</td><td class="fn">cohort-rx-7</td><td>no patient records → k-anon + DP cohort counts</td><td>25</td></tr>
+        <tr><td>Customer-data collaboration</td><td class="fn">deal-1</td><td>no raw rows → k-anon cohorts / in-place training</td><td>25</td></tr>
+        <tr><td>Cross-org code review</td><td class="fn">review-7</td><td>no source → in-place scan, findings only</td><td>1</td></tr>
+        <tr><td>Productivity coaching (HR)</td><td class="fn">coach-3</td><td>no per-employee rows → team metrics only</td><td>5</td></tr>
+      </tbody>
+    </table>
+    <p class="small" style="margin-top:8px">Who buys: DPO / compliance &amp; data-partnership teams. Next vertical: bank↔fintech KYC/AML aggregates under a data-sharing agreement.</p>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+  <!-- 13 PROOF INDEX -->
+  <section class="slide">
+    <div class="statusbar"><span>PROOF INDEX</span><span class="crit">EVERYTHING IS RE-RUNNABLE</span></div>
+    <div class="eyebrow">No claim without runnable evidence · 20 JSON proofs + pinned key</div>
+    <h2>Re-run any of it yourself</h2>
+    <table>
+      <thead><tr><th>Claim</th><th>Run / artifact</th></tr></thead>
+      <tbody>
+        <tr><td>Engine is real (no stubs)</td><td class="mono">uv run pytest -q · 124 passed</td></tr>
+        <tr><td>Deal is signed &amp; tamper-evident</td><td class="mono">scripts/tamper_test.py · verify exit 0→1</td></tr>
+        <tr><td>9 invariants on a sealed deal (9 receipts)</td><td class="mono">parley.verify proof/bundle-deal-1.json</td></tr>
+        <tr><td>DP forces decline; RDP 5 vs 2 (2.5×)</td><td class="mono">proof/dp-composition · rdp-composition.json</td></tr>
+        <tr><td>Purpose re-use blocked</td><td class="mono">proof/purpose-violation.json</td></tr>
+        <tr><td>Cross-vendor, live (Groq + OpenRouter)</td><td class="mono">proof/cross-vendor-{groq,openrouter}.json</td></tr>
+        <tr><td>Clean room over real rows</td><td class="mono">proof/cleanroom.json · 1000 rows → 0 exported</td></tr>
+        <tr><td>Human gate, server-side, all 3 domains</td><td class="mono">proof/human-gate-proof.json</td></tr>
+      </tbody>
+    </table>
+    <p class="small" style="margin-top:8px">Signed bundles for every domain: <code>bundle-deal-1 · review-7 · coach-3 · cohort-rx-7</code> — each re-attestable against <code>owner_pubkey.hex</code> (<code>1f674…cefb8</code>).</p>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+  <!-- 14 REAL VS DEMO -->
+  <section class="slide">
+    <div class="statusbar"><span>NO THEATRE</span><span class="crit">CREDIBILITY</span></div>
+    <div class="eyebrow">What's real vs demo-scoped</div>
+    <h2>Honest about the line</h2>
+    <div class="cols">
+      <div><div class="lbl" style="color:var(--accent)">Real</div><p class="small" style="margin:0 0 6px">Consent, counter-offer, refusal &amp; the human gate are genuine LLM + Band events.</p><p class="small" style="margin:0">Deterministic code under <b>124 tests</b>: the export gate, k-anonymity, DP/RDP accountant, and all signing/verify invariants (<code>rows_exported_zero</code>, <code>provenance_*</code>, <code>post_dp_k_anonymity</code>, <code>purpose_bound</code>). Cross-vendor shown live on Groq + OpenRouter.</p></div>
+      <div><div class="lbl" style="color:var(--bad)">Demo-scoped</div><p class="small" style="margin:0 0 6px">Owner data is synthetic — the clean room aggregates <b>1000 real generated rows</b> with the <b>same</b> logic production would use.</p><p class="small" style="margin:0">Two orgs = two accounts of one operator in the demo (code supports two real operators — <code>run_org.py</code> + <code>JOIN.md</code>). Band Memory is Enterprise-gated → local JSONL fallback.</p></div>
+    </div>
+    <div class="why"><span>WHY IT MATTERS</span><p>Being explicit about the line is itself the credibility signal — the governance guarantees are exactly the parts that are deterministic and tested.</p></div>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+  <!-- 15 HOW TO RUN -->
+  <section class="slide">
+    <div class="statusbar"><span>TRY IT</span><span class="crit">OFFLINE PROOF NEEDS NO BAND / NO KEYS</span></div>
+    <div class="eyebrow">Two minutes to re-verify everything</div>
+    <h2>Run it yourself</h2>
+    <div class="term">
+      <span class="dim"># prereqs: Python 3.11+, uv (https://astral.sh/uv) — no keys needed for the offline proof</span><br>
+      uv sync --dev<br>
+      uv run pytest -q                       <span class="dim"># → 124 passed in ~2s</span><br>
+      uv run python -m parley.verify proof/bundle-deal-1.json   <span class="dim"># → VERIFIED, exit 0</span><br>
+      uv run python scripts/tamper_test.py   <span class="dim"># → PASS (0), then flip → FAIL (1)</span><br><br>
+      <span class="dim"># run the whole band on another vendor (needs that vendor's key)</span><br>
+      PARLEY_LLM_VENDOR=groq GROQ_API_KEY=… uv run python scripts/run_cross_vendor_demo.py<br><br>
+      <span class="dim"># two real operators, one deal (see JOIN.md)</span><br>
+      uv run python scripts/run_org.py buyer   <span class="dim"># &amp; run_org.py owner</span>
+    </div>
+    <p class="small" style="margin-top:8px">Success looks like: <code>VERIFIED — all invariants hold</code> and exit code 0; the tamper test ends in exit 1 (the altered bundle is correctly rejected).</p>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+  <!-- 16 CLOSE -->
+  <section class="slide">
+    <div class="statusbar"><span>PARLEY</span><span class="crit">RECRUITMENT YOU CAN BE TURNED DOWN FOR</span></div>
+    <div class="eyebrow">The agent that can say no</div>
+    <h1 style="font-size:clamp(30px,4.6vw,58px)">Consent. Counter-offer.<br><span class="mark">Verify it yourself.</span></h1>
+    <p class="sub" style="margin-top:6px">Consent-to-join <b>and</b> counter-offer across an org boundary, gated by a first-party human, and provable end-to-end — the trust primitive cross-org agents were missing.</p>
+    <div class="nums">
+      <div><b>124</b><span>tests, no stubs</span></div>
+      <div><b>9</b><span>re-attestable invariants</span></div>
+      <div><b>0</b><span>raw rows exported</span></div>
+      <div><b>any×any</b><span>agents × providers</span></div>
+    </div>
+    <p style="margin-top:14px" class="small">Live demo + downloadable signed bundle on the site · public repo · re-attest with <code>uv run python -m parley.verify</code>.</p>
+    <div class="brandmk"><span class="sq"></span> Parley</div><div class="pageno"></div>
+  </section>
+
+</div>
+
+<div class="hint">← → or Space to navigate · Ctrl/Cmd+P → Save as PDF</div>
+<div class="nav"><button onclick="go(-1)">‹ Prev</button><button onclick="go(1)">Next ›</button></div>
+<script>
+  const slides=[...document.querySelectorAll('.slide')]; let i=0; const total=slides.length;
+  slides.forEach((s,n)=>{const p=s.querySelector('.pageno'); if(p) p.textContent=String(n+1).padStart(2,'0')+' / '+total;});
+  function show(n){ i=Math.max(0,Math.min(total-1,n)); slides[i].scrollIntoView({behavior:'smooth'}); }
+  function go(d){ show(i+d); }
+  addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(1);}
+    if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(-1);}
+  });
+  const obs=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting)i=slides.indexOf(x.target);}),{threshold:.6});
+  slides.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

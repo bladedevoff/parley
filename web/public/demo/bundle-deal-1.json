@@ -1,0 +1,265 @@
+{
+  "deal_id": "deal-1",
+  "counterparty": "northwind",
+  "owner_org": "lumen",
+  "consent": {
+    "final": "accept",
+    "llm_decision": "accept",
+    "policy_decision": "accept",
+    "policy_overruled_llm": false,
+    "reasons": [
+      "request satisfies all policy rules"
+    ],
+    "required_k": 25
+  },
+  "human_gate": {
+    "accepted": true
+  },
+  "purpose": "audience_modeling",
+  "allowed_purposes": [
+    "audience_modeling"
+  ],
+  "injection_flags": [],
+  "dp": {
+    "epsilon": 1.0,
+    "allowed": true,
+    "remaining": 2.0,
+    "reason": "charged"
+  },
+  "capability_result": {
+    "capability": "cohort_aggregate",
+    "rows_exported": 0,
+    "k_floor": 25,
+    "dp_applied": true,
+    "epsilon": 1.0,
+    "result": {
+      "columns": [
+        "bucket",
+        "count"
+      ],
+      "rows": [
+        {
+          "bucket": "age:18-24|region:west",
+          "count": 142
+        },
+        {
+          "bucket": "age:25-34|region:west",
+          "count": 388
+        },
+        {
+          "bucket": "age:25-34|region:east",
+          "count": 272
+        },
+        {
+          "bucket": "age:35-44|region:central",
+          "count": 206
+        },
+        {
+          "bucket": "age:45-54|region:east",
+          "count": 97
+        },
+        {
+          "bucket": "age:55-64|region:west",
+          "count": 54
+        }
+      ],
+      "rows_exported": 0
+    },
+    "deliverable": {
+      "title": "Lookalike segments (ready to target — no raw data left)",
+      "segments": [
+        "Cohort A (n=388, k-safe): 'age:25-34|region:west' — largest cohort.",
+        "Cohort B (n=272, k-safe): 'age:25-34|region:east' — secondary cohort.",
+        "Cohort C (n=206, k-safe): 'age:35-44|region:central' — secondary cohort."
+      ],
+      "note": "6 k-anonymous cohorts (k>=25); no raw, row-level records exported. Differential privacy applied (Laplace, epsilon=1.0)."
+    }
+  },
+  "checker": {
+    "verdict": "PASS",
+    "findings": []
+  },
+  "required_k": 25,
+  "released_rows": [
+    {
+      "bucket": "age:18-24|region:west",
+      "count": 142
+    },
+    {
+      "bucket": "age:25-34|region:west",
+      "count": 388
+    },
+    {
+      "bucket": "age:25-34|region:east",
+      "count": 272
+    },
+    {
+      "bucket": "age:35-44|region:central",
+      "count": 206
+    },
+    {
+      "bucket": "age:45-54|region:east",
+      "count": 97
+    },
+    {
+      "bucket": "age:55-64|region:west",
+      "count": 54
+    }
+  ],
+  "provenance": {
+    "deal_id": "deal-1",
+    "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+    "receipts": [
+      {
+        "seq": 0,
+        "kind": "request",
+        "actor": "@northwind requester",
+        "data": {
+          "capability": "cohort_aggregate",
+          "raw": true,
+          "columns": [
+            "name",
+            "full_name",
+            "email",
+            "phone",
+            "ssn",
+            "customer_id"
+          ],
+          "purpose": "analysis",
+          "injection_flags": [
+            "identifier_exfil"
+          ]
+        },
+        "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "hash": "4e2e77cd6af5b35c2e6a9de35030ad440ac1955bf89941f56e2d7277545c27da",
+        "sig": "3d9c2a904289ad00dba762a9829032ef61e33267e59036a49f0a2bb44a5b12ccb66281517e9170571fc60f1ec02c83381d74ab8effc9f70aa1a482a34287d00a"
+      },
+      {
+        "seq": 1,
+        "kind": "consent",
+        "actor": "@lumen/vault",
+        "data": {
+          "final": "decline",
+          "llm_decision": "counter",
+          "policy_decision": "decline",
+          "policy_overruled_llm": true,
+          "reasons": [
+            "raw/row-level export is forbidden by policy",
+            "request names forbidden identifier columns: ['name', 'full_name', 'email', 'phone', 'ssn', 'customer_id']"
+          ],
+          "required_k": 25,
+          "purpose": null
+        },
+        "prev_hash": "4e2e77cd6af5b35c2e6a9de35030ad440ac1955bf89941f56e2d7277545c27da",
+        "hash": "ed9a4a54529203d6069ea88522ae512fa0acbf81136e34940008f7db1b77975f",
+        "sig": "113e5e212f0e02a638890b783e31a9559ce03b29ae18205bd70be1b6b1433b917f865ce8f6d4ca89fdc4f46a73e46b7b634d764090f647d6b07b6e8d3f2f6a0d"
+      },
+      {
+        "seq": 2,
+        "kind": "request",
+        "actor": "@northwind requester",
+        "data": {
+          "capability": "cohort_aggregate",
+          "raw": false,
+          "columns": [
+            "bucket",
+            "count"
+          ],
+          "k": 25,
+          "purpose": "audience_modeling",
+          "injection_flags": []
+        },
+        "prev_hash": "ed9a4a54529203d6069ea88522ae512fa0acbf81136e34940008f7db1b77975f",
+        "hash": "649b0b4488e53d20e4ccb06f20a29654e9911ef64bfc447cb81f465f45bf9b5f",
+        "sig": "5eafe8448d1723a6b335bcb9caa04fcd189457b2f2742b5fa01c0bd13cf5e81d244f9ea4c37c3d2dafa09fba2adee6a80df1d062d922fbe1a5ab598757bee60d"
+      },
+      {
+        "seq": 3,
+        "kind": "consent",
+        "actor": "@lumen/vault",
+        "data": {
+          "final": "accept",
+          "llm_decision": "accept",
+          "policy_decision": "accept",
+          "policy_overruled_llm": false,
+          "reasons": [
+            "request satisfies all policy rules"
+          ],
+          "required_k": 25,
+          "purpose": "audience_modeling"
+        },
+        "prev_hash": "649b0b4488e53d20e4ccb06f20a29654e9911ef64bfc447cb81f465f45bf9b5f",
+        "hash": "d7b3d5d9b4ddd83403b347c35ef9e2e20f4c9f4695d3683574b883cc296b40ca",
+        "sig": "7dc52b2bf11d1bd0748cea5f5976b0a08310033d62efe4c67a828ca66261c33725826f7ecbb44801263c9e2a638b5704a5baa5a9b99a9ec3bfc0e8a0055f0005"
+      },
+      {
+        "seq": 4,
+        "kind": "human_approve",
+        "actor": "@northwind/coordinator",
+        "data": {
+          "by": "@northwind/coordinator",
+          "is_human": false,
+          "org": "northwind",
+          "accepted": false
+        },
+        "prev_hash": "d7b3d5d9b4ddd83403b347c35ef9e2e20f4c9f4695d3683574b883cc296b40ca",
+        "hash": "70b2858ed03658a25494056fb669ca68c01ef325129e44902c5535fe8851787c",
+        "sig": "e42b87abd48573f66532f7024e7ce329b3f19eeeae58acd98c52380eef527e39c0bbd5ed8e2dd56a888da121a9559c5e4aa9b5f108fbb5cc573479e21bf9c007"
+      },
+      {
+        "seq": 5,
+        "kind": "human_approve",
+        "actor": "@lumen DPO (human)",
+        "data": {
+          "by": "@lumen DPO (human)",
+          "is_human": true,
+          "org": "lumen",
+          "accepted": true
+        },
+        "prev_hash": "70b2858ed03658a25494056fb669ca68c01ef325129e44902c5535fe8851787c",
+        "hash": "8d62b2110a31fe84ef7757dfdd83eeb105406620361a5839c3eb9e2b96557307",
+        "sig": "db1e9edcc0876cf91b34e11521ffa993ff2d34350c34a6da21cb1075c5c9e3a1d2a145dcfb0e72be3ce67f7f55dade78fafaa0346914c7d4c8bb8ebb88c45b02"
+      },
+      {
+        "seq": 6,
+        "kind": "dp_charge",
+        "actor": "@lumen/vault",
+        "data": {
+          "epsilon": 1.0,
+          "allowed": true,
+          "remaining": 2.0,
+          "reason": "charged"
+        },
+        "prev_hash": "8d62b2110a31fe84ef7757dfdd83eeb105406620361a5839c3eb9e2b96557307",
+        "hash": "a072cb7c5b8773815e800604c8ef922b9ca4824c8749257c9cef06bebc8f384a",
+        "sig": "a803976fa0b7c066e5258961b9c6488940117ac32c364226953922331ecdf9d684250ea77d3283189eaf9e0457a73168e6c77540d78f7d1ec1cecbc352bbdc0b"
+      },
+      {
+        "seq": 7,
+        "kind": "capability_run",
+        "actor": "@lumen/vault",
+        "data": {
+          "capability": "cohort_aggregate",
+          "rows_exported": 0,
+          "purpose": "audience_modeling"
+        },
+        "prev_hash": "a072cb7c5b8773815e800604c8ef922b9ca4824c8749257c9cef06bebc8f384a",
+        "hash": "be996ca0a6b6fbfa0b70f6cf436d9d4c6d19257b20d80ef6ea5469096eff38f5",
+        "sig": "9274c1810dca44c7aca57014321fee723949cc595667d1069061750e3f017d640abe2cc3762b50f9bf1b9a3690ce0de873cd92f5342f0412aebb3ec02dfd8c02"
+      },
+      {
+        "seq": 8,
+        "kind": "checker",
+        "actor": "@northwind/checker",
+        "data": {
+          "verdict": "PASS",
+          "findings": []
+        },
+        "prev_hash": "be996ca0a6b6fbfa0b70f6cf436d9d4c6d19257b20d80ef6ea5469096eff38f5",
+        "hash": "e8825efc8db59c299d5c1536383453efe09ef394afdc166b65b01a9856007bdd",
+        "sig": "a3e54d233b52436dfedfdb631a642590475b22b66d9c8062d7f55f054500667203ef3fbdf0a0f81ed59b8fba02530c16e49f8cb583ac791f1893e2b59a3d5c00"
+      }
+    ],
+    "public_key": "1f67436bd00a36c2d885fc4a644951dd947ca9200752a406d7e2879f953cefb8"
+  }
+}

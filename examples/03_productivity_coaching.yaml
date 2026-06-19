@@ -1,0 +1,30 @@
+# Example 3 — Employee-productivity review by an external coach, SAME two orgs/agents.
+# Northwind (acting as an external business coach) is recruited to assess Lumen's
+# productivity. Lumen's HR-data custodian refuses to hand over per-employee
+# performance records (PII / highly sensitive) and counter-offers: compute
+# TEAM-level productivity metrics IN PLACE and return only aggregates (no
+# per-employee rows), with Lumen's human (the DPO) approving. Same kernel,
+# sensitive-HR domain — no new orgs/agents, just a different scenario.
+#   PARLEY_SCENARIO=examples/03_productivity_coaching.yaml uv run python -m parley.agents.vault
+deal_id: coach-3
+buyer:  { name: Northwind (Coaching), org: northwind, goal: assess org productivity and advise leadership }
+owner:  { name: Lumen (HR), org: lumen, custodian_role: employee-data custodian }
+agents:
+  coordinator: "@northwind-analytics/coordinator"
+  modeler: "@northwind-analytics/modeler"     # the coach: wants the performance data
+  checker: "@northwind-analytics/checker"      # validates the returned aggregates
+  vault: "@lumen-retail/vault"                 # owns sensitive HR data; the recruited stranger
+policy:
+  k_floor: 5                          # suppress teams too small to anonymize
+  owner_org: lumen
+  forbidden_columns: [name, employee_id, email, salary, review_text, manager_notes]
+  capabilities: [productivity_metrics]
+request:
+  raw_ask: "per-employee performance records: names, review scores, manager notes, salaries"
+  aggregate_spec: "team-level productivity metrics only; no per-employee rows; no names/IDs/salaries; teams < k_floor suppressed"
+cohorts:                              # employees per team (headcount)
+  "Engineering": 42
+  "Sales": 31
+  "Support": 27
+  "Design": 9
+  "Exec": 3                           # < k_floor -> suppressed

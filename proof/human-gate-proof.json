@@ -1,0 +1,37 @@
+{
+  "_comment": "Server-side proof that the human gate is REAL, captured from the live vault agent's own execution log (Band ClaudeSDKAdapter session). The agent API only routes an agent its own @mentions and Band's Human API is Enterprise-gated, so a single unified room transcript isn't retrievable on our plan — but the vault's process log is the authoritative server record of what it received and ran. Across all three domains the vault refused an AGENT's APPROVE and only invoked RunCapability AFTER the data owner's first-party human (Denis Belianin, @lumen-retail, user 17786285-09fa-4077-a512-870de6d5f858) issued APPROVE in the room.",
+  "gate_invariant": "RunCapability runs ONLY after a first-party owner-human APPROVE; an agent's APPROVE is refused. Enforced in code (RunCapability is fail-closed: approver_is_human + approver_org==owner) AND observed live.",
+  "runs": [
+    {
+      "domain": "data",
+      "deal_id": "deal-1",
+      "room_id": "b1027df8-53f5-402e-9c8e-474c599c0367",
+      "agent_approve_refused": "vault posted: \"Refused. `APPROVE deal-1` from @northwind-analytics/coordinator is an AGENT approval and does NOT satisfy the gate ...\" (band_send_message tool call)",
+      "then_after_human_approve": "mcp__band__runcapability { capability: 'cohort_aggregate', deal_id: 'deal-1' }",
+      "checker_verdict": "PASS: 6 cohorts, all counts >= 25, no identifiers, rows_exported=0",
+      "evidence": "vault execution log (room b1027df8): refusal band_send_message, then RunCapability(cohort_aggregate) only after the Lumen human APPROVE; checker PASS captured in proof/example-data-fullrun.json"
+    },
+    {
+      "domain": "code_review",
+      "deal_id": "review-7",
+      "room_id": "0b515d96-e209-4f42-ba9e-712cd0e3276f",
+      "then_after_human_approve": "mcp__band__runcapability { capability: 'code_scan', deal_id: 'review-7' }",
+      "checker_verdict": "PASS: 5 finding classes (sast:critical=2, sast:high=9, sast:medium=24, secret:exposed=1, dependency:CVE=7), no identifiers, rows_exported=0; source never left",
+      "evidence": "proof/example-code-fullrun.json + vault execution log (room 0b515d96)"
+    },
+    {
+      "domain": "productivity_coaching",
+      "deal_id": "coach-3",
+      "room_id": "769183b2-9c85-4a47-8479-075e03440da2",
+      "then_after_human_approve": "mcp__band__runcapability { capability: 'productivity_metrics', deal_id: 'coach-3' }",
+      "checker_verdict": "PASS: 4 teams (Engineering, Sales, Support, Design), Exec (3 < k_floor 5) suppressed, no per-employee data, rows_exported=0",
+      "evidence": "proof/example-coach-3-fullrun.json + vault execution log (room 769183b2)"
+    }
+  ],
+  "human_user": {
+    "name": "Denis Belianin",
+    "handle": "@lumen-retail",
+    "user_id": "17786285-09fa-4077-a512-870de6d5f858",
+    "role": "first-party data-owner human (Lumen DPO) — the only party whose APPROVE the vault accepts"
+  }
+}

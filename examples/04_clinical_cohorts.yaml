@@ -1,0 +1,43 @@
+# Example 4 — FLAGSHIP regulated vertical: cross-org clinical cohort sharing (HIPAA).
+#
+# The pain (industry context, illustrative): a population-health research partner needs
+# cohort statistics from a hospital network, but under HIPAA the provider legally CANNOT
+# hand over patient records. Today this runs through Data Use Agreements + IRB + privacy
+# review — weeks-to-months of legal/DPO email threads, and HIPAA penalties run up to
+# ~$1.9M per violation category per year. Most such collaborations stall or never start.
+#
+# With Parley: the provider's vault (the recruited stranger) refuses raw records and
+# counter-offers in-place, k-anonymous + differentially-private cohort counts; a provider
+# human (the Privacy Officer) approves in-room; nothing patient-level ever leaves; and the
+# whole exchange is signed and re-verifiable. A weeks-long DUA sign-off collapses into one
+# governed, same-room, auditable decision.
+#
+# Run offline:  PARLEY_SCENARIO=examples/04_clinical_cohorts.yaml uv run python -m parley.agents.vault
+deal_id: cohort-rx-7
+buyer:  { name: Meridian Population Health, org: meridian, goal: build a risk-stratification cohort model }
+owner:  { name: Lakeside Health Network, org: lakeside, custodian_role: clinical data custodian }
+agents:
+  coordinator: "@meridian-research/coordinator"
+  modeler: "@meridian-research/modeler"
+  checker: "@meridian-research/checker"
+  vault: "@lakeside-health/vault"
+policy:
+  k_floor: 25
+  owner_org: lakeside
+  forbidden_columns: [name, full_name, mrn, ssn, dob, date_of_birth, address, phone, email]
+  capabilities: [cohort_aggregate]
+  allowed_purposes: [population_health_research]   # purpose limitation (HIPAA + GDPR 5(1)(b))
+  deliverable_title: "Clinical cohort report (no patient records left)"
+  dp_epsilon: 1.0
+  dp_total_budget: 2.5
+request:
+  raw_ask: "patient-level records: name, MRN, DOB, address, diagnosis codes, labs, visit history"
+  aggregate_spec: "cohort counts by age band + condition + region; every cohort >= k_floor; no identifiers; no patient rows"
+cohorts:
+  "age:45-54|cond:diabetes|region:north": 312
+  "age:55-64|cond:diabetes|region:north": 287
+  "age:45-54|cond:hypertension|region:south": 268
+  "age:55-64|cond:hypertension|region:south": 341
+  "age:35-44|cond:asthma|region:central": 156
+  "age:65+|cond:chf|region:north": 94
+  "age:18-34|cond:rare_immune|region:rural": 11   # < k_floor -> suppressed (privacy)

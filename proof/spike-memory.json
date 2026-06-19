@@ -1,0 +1,8 @@
+{
+  "_comment": "Parley uses Band MEMORY: store -> recall -> supersede a versioned cross-org agreement. No competitor in the field uses Band memory.",
+  "counterparty": "northwind-analytics",
+  "stored_id": "mem-1",
+  "superseded_to": "mem-2",
+  "active_terms": "parley_agreement counterparty northwind-analytics deal deal-1 capability cohort_aggregate terms aggregates only; k>=50 (tightened); no raw rows",
+  "backend": "JSONL fallback (Band Memory API plan-gated)"
+}

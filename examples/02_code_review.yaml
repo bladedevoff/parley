@@ -1,0 +1,30 @@
+# Example 2 — Cross-org code review (programming domain), SAME two orgs/agents.
+# Northwind (the requester) wants to audit Lumen's PRIVATE codebase for vulns.
+# Lumen's agent refuses to ship the source and counter-offers: run the static-
+# analysis / security scan IN PLACE and return only the findings (counts by
+# severity, file:line flags) — never the source. Same kernel; no new orgs/agents
+# needed — reuses the four registered agents, just a different scenario.
+#   PARLEY_SCENARIO=examples/02_code_review.yaml uv run python -m parley.agents.vault
+deal_id: review-7
+buyer:  { name: Northwind (Security Audit), org: northwind, goal: audit a partner's service for vulnerabilities }
+owner:  { name: Lumen (Platform), org: lumen, custodian_role: source-code custodian }
+agents:
+  coordinator: "@northwind-analytics/coordinator"
+  modeler: "@northwind-analytics/modeler"     # the auditor: wants the code to scan
+  checker: "@northwind-analytics/checker"      # validates the returned findings
+  vault: "@lumen-retail/vault"                 # owns the private repo; the recruited stranger
+policy:
+  k_floor: 1                          # findings need no k-anonymity, but source must NEVER leave
+  owner_org: lumen
+  forbidden_columns: [source, file_contents, secret, api_key, token]
+  capabilities: [code_scan]
+  repo_path: examples/private_repo    # the owner's private code, scanned IN PLACE
+request:
+  raw_ask: "the full private source repository (all files) so we can scan it on our side"
+  aggregate_spec: "run the scan in place; return only findings — counts by severity and file:line flags, no source"
+cohorts:                              # findings-by-severity from the in-place scan
+  "sast:critical": 2
+  "sast:high": 9
+  "sast:medium": 24
+  "secret:exposed": 1
+  "dependency:CVE": 7

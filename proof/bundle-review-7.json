@@ -1,0 +1,205 @@
+{
+  "deal_id": "review-7",
+  "counterparty": "northwind",
+  "owner_org": "lumen",
+  "consent": {
+    "final": "accept",
+    "llm_decision": "accept",
+    "policy_decision": "accept",
+    "policy_overruled_llm": false,
+    "reasons": [
+      "request satisfies all policy rules"
+    ],
+    "required_k": 1
+  },
+  "human_gate": {
+    "accepted": true
+  },
+  "purpose": null,
+  "allowed_purposes": [],
+  "injection_flags": [],
+  "dp": {},
+  "capability_result": {
+    "capability": "code_scan",
+    "rows_exported": 0,
+    "source_exported": false,
+    "result": {
+      "findings_by_severity": {
+        "high": 3,
+        "critical": 2,
+        "medium": 1
+      },
+      "total_findings": 6,
+      "files_scanned": 1,
+      "locations": [
+        "payments.py:12:secret:api_token",
+        "payments.py:13:secret:aws_access_key_id",
+        "payments.py:14:secret:hardcoded_password",
+        "payments.py:19:crypto:weak_hash",
+        "payments.py:21:injection:shell_true",
+        "payments.py:26:injection:eval_exec"
+      ]
+    },
+    "deliverable": {
+      "title": "Triaged Fix-Plan (from a REAL in-place scan — source never left)",
+      "plan": [
+        "1) 2 CRITICAL (secrets/keys): rotate + remove now, ~1 day.",
+        "2) 3 HIGH (injection/eval/shell): patch next sprint.",
+        "3) 1 medium/low (weak hash/TLS/debug): backlog."
+      ],
+      "locations_sample": [
+        "payments.py:12:secret:api_token",
+        "payments.py:13:secret:aws_access_key_id",
+        "payments.py:14:secret:hardcoded_password",
+        "payments.py:19:crypto:weak_hash",
+        "payments.py:21:injection:shell_true"
+      ],
+      "note": "6 findings across 1 files; repository source never exported."
+    }
+  },
+  "checker": {
+    "verdict": "PASS",
+    "findings": []
+  },
+  "required_k": 1,
+  "released_rows": [],
+  "provenance": {
+    "deal_id": "review-7",
+    "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+    "receipts": [
+      {
+        "seq": 0,
+        "kind": "request",
+        "actor": "@northwind requester",
+        "data": {
+          "capability": "code_scan",
+          "raw": true,
+          "columns": [
+            "source",
+            "file_contents",
+            "secret",
+            "api_key",
+            "token"
+          ],
+          "purpose": "analysis",
+          "injection_flags": []
+        },
+        "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "hash": "3a396e2fba464735e859620ab1e42148de6f90a48c6f1f3603f9a0d2a14ac67e",
+        "sig": "aec7f460ac19545028d1799634c10335c4e4d03085298413d1ead0ec0143e4bf0c1b1d29964db7f2379e400dff913f4a5643a31887d7d9b0ef54fa1b584d280e"
+      },
+      {
+        "seq": 1,
+        "kind": "consent",
+        "actor": "@lumen/vault",
+        "data": {
+          "final": "decline",
+          "llm_decision": "counter",
+          "policy_decision": "decline",
+          "policy_overruled_llm": true,
+          "reasons": [
+            "raw/row-level export is forbidden by policy",
+            "request names forbidden identifier columns: ['source', 'file_contents', 'secret', 'api_key', 'token']"
+          ],
+          "required_k": 1,
+          "purpose": null
+        },
+        "prev_hash": "3a396e2fba464735e859620ab1e42148de6f90a48c6f1f3603f9a0d2a14ac67e",
+        "hash": "584e9e00ff4632de558158a0aa5954e7f4731e0c277d35976772f1f6b7178fc7",
+        "sig": "34cfe7c13a056c78766d3e2ad163679725d6d878cad434c95eb27e46a18a952dd34427f6f5f8a842c6c1ab2f2149e9183b6a2bbbf65c935a24407c0b3707b00e"
+      },
+      {
+        "seq": 2,
+        "kind": "request",
+        "actor": "@northwind requester",
+        "data": {
+          "capability": "code_scan",
+          "raw": false,
+          "columns": [
+            "bucket",
+            "count"
+          ],
+          "k": 1,
+          "purpose": null,
+          "injection_flags": []
+        },
+        "prev_hash": "584e9e00ff4632de558158a0aa5954e7f4731e0c277d35976772f1f6b7178fc7",
+        "hash": "cf1a74bad66f8d73b5db91878f1d70dc07727f48083e0ed66d3ace5c2761c631",
+        "sig": "7d9fbed2d4aa54f4eb49334c4872ea08e8b09ef672ce733324018974df105b43fd6644c184ba951800d5d07b2c5de2e930f7075ee4066b41873c3ee9673b9301"
+      },
+      {
+        "seq": 3,
+        "kind": "consent",
+        "actor": "@lumen/vault",
+        "data": {
+          "final": "accept",
+          "llm_decision": "accept",
+          "policy_decision": "accept",
+          "policy_overruled_llm": false,
+          "reasons": [
+            "request satisfies all policy rules"
+          ],
+          "required_k": 1,
+          "purpose": null
+        },
+        "prev_hash": "cf1a74bad66f8d73b5db91878f1d70dc07727f48083e0ed66d3ace5c2761c631",
+        "hash": "aaf9c38bcec8fda7aa6695ebd22f7686d9ac0257e45f6335e4c9d85a2e52d2cf",
+        "sig": "8c2b664d27339b00a5b08d1cfa297e44bb16b21630d526070e84206f94be5dfbde2d24b028a8a4abf64b45740e014912ed871d619835024b37bcdceaa807d80e"
+      },
+      {
+        "seq": 4,
+        "kind": "human_approve",
+        "actor": "@northwind/coordinator",
+        "data": {
+          "by": "@northwind/coordinator",
+          "is_human": false,
+          "org": "northwind",
+          "accepted": false
+        },
+        "prev_hash": "aaf9c38bcec8fda7aa6695ebd22f7686d9ac0257e45f6335e4c9d85a2e52d2cf",
+        "hash": "62b2ef608caaabf132de0e54ee58c5d8c37c29249c186c3322fdb16af36da418",
+        "sig": "9ab86e73238b7299d64ead40798e96cfb314cbfdff8bf25d5f8934defd05eb05124b8773b2db320f5ce88cc3043a481252ddda59f7bda07c4ba74d136149970d"
+      },
+      {
+        "seq": 5,
+        "kind": "human_approve",
+        "actor": "@lumen DPO (human)",
+        "data": {
+          "by": "@lumen DPO (human)",
+          "is_human": true,
+          "org": "lumen",
+          "accepted": true
+        },
+        "prev_hash": "62b2ef608caaabf132de0e54ee58c5d8c37c29249c186c3322fdb16af36da418",
+        "hash": "19c663c4c22a6138418fc80beeebca90f7fbcd3ace9eff2eb93d6fd50b68b61b",
+        "sig": "5777b9bd39e8a9c83b562cff729074103a7a73b9ca7e5c1d8e7f5d877e4068cc64ffe3f32df79abb205b13cee22c935e9eb3481e978ec92dd99956dea6f96700"
+      },
+      {
+        "seq": 6,
+        "kind": "capability_run",
+        "actor": "@lumen/vault",
+        "data": {
+          "capability": "code_scan",
+          "rows_exported": 0,
+          "purpose": null
+        },
+        "prev_hash": "19c663c4c22a6138418fc80beeebca90f7fbcd3ace9eff2eb93d6fd50b68b61b",
+        "hash": "02e941bb3abaff05ce88a804803b05118d7b9ab0f755c3080891dce490c50cb1",
+        "sig": "a68065d96294f134d8894de426baefb9ef7617ced75f6ab8b8b456a38997f5f914e75a2270ba1cd624fb38243e61edd5fc278c640b3a9e458789a75280cdcd0e"
+      },
+      {
+        "seq": 7,
+        "kind": "checker",
+        "actor": "@northwind/checker",
+        "data": {
+          "verdict": "PASS",
+          "findings": []
+        },
+        "prev_hash": "02e941bb3abaff05ce88a804803b05118d7b9ab0f755c3080891dce490c50cb1",
+        "hash": "e7123c73fa1e5c0684a64d807579784ad93fe0c2ba691d73fc2da866b9185bef",
+        "sig": "16e4ceb3b9923e2fd913edcb8e61b6ed5d411d9e9106fb53869704017c965641ac9f6a0fff85b4d5be28329035e5ffbe2043a65e6092f15583d3bd76a3c7210a"
+      }
+    ],
+    "public_key": "1f67436bd00a36c2d885fc4a644951dd947ca9200752a406d7e2879f953cefb8"
+  }
+}

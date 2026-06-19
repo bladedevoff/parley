@@ -1,0 +1,53 @@
+# ── Parley deployment config ────────────────────────────────────────────────
+# Everything that ties Parley to a specific pair of organizations lives here.
+# To run Parley for YOUR two orgs, edit this file + agent_config.yaml/.env
+# (the agent UUIDs + API keys) — no code changes needed.
+#
+#   buyer  = the org that WANTS the data (the requester / recruiter side)
+#   owner  = the org that OWNS the data (the recruited "stranger" / vault side)
+#
+# Override the path with the PARLEY_SCENARIO env var if you keep several.
+
+deal_id: deal-1
+
+buyer:
+  name: Northwind Analytics
+  org: northwind                      # short slug; must match the handle prefix below
+  goal: build a lookalike audience model for a campaign
+
+owner:
+  name: Lumen Retail
+  org: lumen
+  custodian_role: data custodian for the customer database
+
+# Real Band handles of the registered agents (credentials live in .env).
+agents:
+  coordinator: "@northwind-analytics/coordinator"   # buyer: recruiter / liaison
+  modeler: "@northwind-analytics/modeler"           # buyer: needs the data
+  checker: "@northwind-analytics/checker"            # buyer: validates results
+  vault: "@lumen-retail/vault"                       # owner: the stranger custodian
+
+policy:
+  k_floor: 25                         # minimum cohort size; smaller cohorts are suppressed
+  owner_org: lumen                    # ONLY a human from this org may approve an export
+  forbidden_columns: [name, full_name, email, phone, ssn, customer_id]
+  # Capabilities the owner exposes — the kernel governs access to each. Add your
+  # own (data sources + tools) in parley/capabilities.py; none may release raw data.
+  capabilities: [cohort_aggregate, train_in_place]
+
+request:
+  raw_ask: "customer-level rows: age, income bracket, purchase frequency, product category preferences, geographic location, browsing behavior"
+  aggregate_spec: "cohort counts grouped by age band, income bracket, region; every cohort >= k_floor; no identifier columns; no raw rows"
+
+# The owner's private in-place data (cohort label -> number of customers).
+# Stands in for the real database; the vault only ever returns k-suppressed
+# counts over this — raw rows never leave. One cohort below k_floor demonstrates
+# k-anonymity suppression.
+cohorts:
+  "age:18-24|region:west": 142
+  "age:25-34|region:west": 388
+  "age:25-34|region:east": 271
+  "age:35-44|region:central": 205
+  "age:45-54|region:east": 96
+  "age:55-64|region:west": 54
+  "age:65+|region:rural": 12          # < k_floor -> suppressed on export

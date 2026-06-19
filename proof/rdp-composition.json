@@ -1,0 +1,13 @@
+{
+  "mechanism": "Gaussian",
+  "noise_multiplier": 4.0,
+  "budget_epsilon": 3.0,
+  "delta": 1e-05,
+  "per_query_epsilon_at_delta": 1.2675,
+  "baseline": "naive linear summation of per-query epsilon (k * eps1), same delta",
+  "linear_summation_fits": 2,
+  "rdp_advanced_composition_fits": 5,
+  "rdp_epsilon_for_the_linear_count": 1.7675,
+  "improvement_x": 2.5,
+  "note": "Apples-to-apples: identical mechanism and delta on both sides; RDP composes additively in Renyi space then converts, beating the linear sum."
+}

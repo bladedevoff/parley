@@ -1,0 +1,43 @@
+{
+  "scenario": "forced_counter",
+  "description": "Modeler counters with safer terms; export stays blocked until an accept + human ack.",
+  "deal_id": "deal-counter-002",
+  "emit": {
+    "decision": "counter",
+    "rationale": "Will share k-suppressed aggregates only, no raw join keys.",
+    "counter_terms": "k_floor=25; aggregates only; no PII columns",
+    "confidence": 0.81
+  },
+  "accept_after_counter": {
+    "decision": "accept",
+    "rationale": "Counterparty agreed to k-suppressed aggregates.",
+    "counter_terms": null,
+    "confidence": 0.88
+  },
+  "human_ack": {
+    "action": "APPROVE",
+    "deal_id": "deal-counter-002"
+  },
+  "aggregate": {
+    "query": {"columns": ["bucket", "count"]},
+    "k_floor": 25,
+    "dataset": [
+      {"bucket": "west"}, {"bucket": "west"}, {"bucket": "west"},
+      {"bucket": "west"}, {"bucket": "west"}, {"bucket": "west"},
+      {"bucket": "west"}, {"bucket": "west"}, {"bucket": "west"},
+      {"bucket": "west"}, {"bucket": "west"}, {"bucket": "west"},
+      {"bucket": "west"}, {"bucket": "west"}, {"bucket": "west"},
+      {"bucket": "west"}, {"bucket": "west"}, {"bucket": "west"},
+      {"bucket": "west"}, {"bucket": "west"}, {"bucket": "west"},
+      {"bucket": "west"}, {"bucket": "west"}, {"bucket": "west"},
+      {"bucket": "west"}, {"bucket": "west"}, {"bucket": "west"},
+      {"bucket": "east"}, {"bucket": "east"}, {"bucket": "east"}
+    ]
+  },
+  "expected": {
+    "counter_target": "@northwind-analytics/coordinator",
+    "accept_target": "@northwind-analytics/coordinator",
+    "export_blocked_before_ack": true,
+    "rows_exported": 0
+  }
+}
